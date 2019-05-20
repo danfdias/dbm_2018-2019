@@ -1,0 +1,38 @@
+{
+    "port": 8082,
+    "dbname": "labs.db",
+    "schemas": [
+        {
+            "name": "Actor",
+            "path": "./Server/Schemas/actor-schema.json"
+        },
+        {
+            "name": "Category",
+            "path": "./Server/Schemas/category-schema.json"
+        },
+        {
+            "name": "Director",
+            "path": "./Server/Schemas/director-schema.json"
+        },
+        {
+            "name": "Movie",
+            "path": "./Server/Schemas/movie-schema.json"
+        },
+        {
+            "name": "Place",
+            "path": "./Server/Schemas/place-schema.json"
+        },
+        {
+            "name": "Room",
+            "path": "./Server/Schemas/room_cinema-schema.json"
+        },
+        {
+            "name": "Ticket",
+            "path": "./Server/Schemas/ticket-schema.json"
+        }
+    ],
+    "staticFiles": [{
+        "originalPath":"./Server/Database/sqlite.js",
+        "destinationPath":"./Publish/Database/sqlite.js"
+    }]
+}

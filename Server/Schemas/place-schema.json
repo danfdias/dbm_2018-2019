@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Place",
+    "description": "The place that users sits to watch the movie",
+    "type": "object",
+    "properties": {
+        "chair_number": {
+            "description": "The number of the chair",
+            "type": "integer"
+        },
+        "row": {
+            "description": "The row of the place",
+            "type": "string"
+        }
+    },
+    "required": [
+        "chair_number",
+        "row"
+    ],
+    "relation": {
+        "model": "Ticket",
+        "relation": "1-1"
+    }
+}

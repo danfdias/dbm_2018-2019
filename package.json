@@ -1,0 +1,23 @@
+{
+  "name": "projeto_dbm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rafael Machado",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^6.10.0",
+    "body-parser": "^1.19.0",
+    "child_process": "^1.0.2",
+    "del": "^4.1.1",
+    "express": "^4.17.0",
+    "fs": "0.0.1-security",
+    "mkdirp": "^0.5.1",
+    "mustache": "^3.0.1",
+    "path": "^0.12.7",
+    "sqlite3": "^4.0.8"
+  }
+}

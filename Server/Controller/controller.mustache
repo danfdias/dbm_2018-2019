@@ -1,0 +1,72 @@
+
+/************************************************************************************************************************************/
+/**************************************************** {{controllerTitle}} ***********************************************************/
+/************************************************************************************************************************************/
+
+var {{controllerTitle}} = require('../Models/{{controllerTitle}}.js');
+
+/**
+* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada
+* @param {any} object Representa o objeto retornado pela query à abse de dados
+* @param {any} type Representa o tipo de objeto que se pretende converter
+* @returns Devolve um objeto do tipo "type" com o conteúdo que está no objeto "object"
+*/
+function mapping(object, type) {
+    var obj = new type();
+    Object.keys(object).forEach(function (value) {
+        if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
+            obj[value] = object[value];
+    });
+    return obj;
+}
+
+/**
+* rota que chama a funcao save para fazer um insert a tabela {{controllerTitle}}
+*/
+router.post('/{{controllerTitle}}', function (req, res) {
+    mapping(req.body, {{controllerTitle}}).save(function(){
+        res.send('insert');
+        }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
+});
+
+/**
+* rota que chama a funcao all que faz um select de toda a informacao numa tabela {{controllerTitle}}
+*/
+router.get('/{{controllerTitle}}', function (req, res) {
+    {{controllerTitle}}.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
+        res.json(rows);
+    });
+});
+
+/**
+* rota que chama a funcao get que faz um select de uma determinada coluna a tabela {{controllerTitle}} 
+*/
+router.get('/{{controllerTitle}}/:id', function (req, res) {
+    {{controllerTitle}}.get(req.params.id, function (row) {
+        res.json(row);
+    });
+});
+
+/**
+* rota que chama a funcao save para fazer um update de uma coluna a tabela {{controllerTitle}}
+*/
+router.put('/{{controllerTitle}}/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
+    var obj = mapping(req.body, {{controllerTitle}});
+    obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
+    obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
+        res.json({
+            success: !err
+        });
+    });
+});
+
+/**
+* rota que chama a funcao delete que faz um delete de uma coluna da tabela {{controllerTitle}}
+*/
+router.delete('/{{controllerTitle}}/:id', function (req, res) {
+    {{controllerTitle}}.delete(req.params.id, function (err) {
+        res.json({
+            success: !err
+        });
+    });
+});

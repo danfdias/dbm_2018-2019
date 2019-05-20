@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Category",
+    "description": "The category of the movie",
+    "type": "object",
+    "properties": {
+        "type": {
+            "description": "The type of the category, that movie have",
+            "type": "string"
+        }
+    },
+    "required": [
+        "type"
+    ]
+}
