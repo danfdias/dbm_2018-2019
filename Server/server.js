@@ -69,6 +69,9 @@ function generateFolders() {
         if (err) throw err;
         console.log('Controllers Published!\n');
     });
+
+    // Executar server.js
+    child_process.fork('./Publish/index.js');
 }
 
 function createChainDirectory(paths) {
