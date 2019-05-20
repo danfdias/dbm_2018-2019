@@ -25,6 +25,10 @@ function generateFolders() {
     // Criar pasta Database
     createDirectory('./Publish/Database');
     console.log('Folders have been created \n');
+    createFile('./Publish/Public', "index.html", 
+    "<!DOCTYPE html> \n<html lang='en'>\n<head> " + 
+    "<meta charset='UTF-8'> \n<link rel='stylesheet' type='text/css' href='css/default.css'>\n" +
+    "<title>Projeto DBM</title> \n</head> \n<body> \n<h1>Servidor Gerado!</h1> \n</body> \n</html>");
 
     // Gerar classes    
     // Ler ficheiro 'config.json'
@@ -80,6 +84,13 @@ function createChainDirectory(paths) {
 
 function createDirectory(path) {
     fs.mkdirSync(path);
+}
+
+function createFile(path, fileName, content){
+    fs.writeFile(path + "/" + fileName, content, function (err) {
+        if (err) throw err;
+        console.log('File Created!\n');
+    });
 }
 
 module.exports.generateFolders = generateFolders;
