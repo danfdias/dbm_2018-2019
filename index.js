@@ -10,8 +10,8 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/", function (request, response) {
-    response.sendFile(__dirname + "/public/" + "index.html");
+app.get("/", function (req, res) {
+    res.sendFile(__dirname + "/public/" + "index.html");
 });
 
 app.post('/generate', function (req, res) {
