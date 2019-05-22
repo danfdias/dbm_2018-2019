@@ -1,6 +1,6 @@
 {
     "port": 8082,
-    "dbname": "labs.db",
+    "dbname": "projeto_dbm.db",
     "schemas": [
         {
             "name": "Actor",

@@ -33,7 +33,7 @@ function generateFolders() {
     // Gerar classes    
     // Ler ficheiro 'config.json'
     var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json')));
-    classGenerator.createClasses(config.schemas);
+    classGenerator.createClasses(config);
     console.log('Models created \n');
 
     // Criar DB
@@ -56,7 +56,7 @@ function generateFolders() {
 
     //Publicar index.js do novo servidor
     var output = mustache.render(str.toString(), JSON.parse(view));
-    console.log("\n" + output + "\n");
+    //console.log("\n" + output + "\n");
     fs.writeFile('./Publish/index.js', output, function (err) {
         if (err)
             console.log(err);

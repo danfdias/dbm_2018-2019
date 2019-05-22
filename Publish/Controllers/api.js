@@ -16,9 +16,10 @@ var Actor = require('../Models/Actor.js');
 function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
+        console.log(value);
         if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
             obj[value] = object[value];
-    });
+    });    
     return obj;
 }
 
@@ -88,9 +89,10 @@ var Category = require('../Models/Category.js');
 function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
+        console.log(value);
         if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
             obj[value] = object[value];
-    });
+    });    
     return obj;
 }
 
@@ -160,9 +162,10 @@ var Director = require('../Models/Director.js');
 function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
+        console.log(value);
         if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
             obj[value] = object[value];
-    });
+    });    
     return obj;
 }
 
@@ -232,9 +235,10 @@ var Movie = require('../Models/Movie.js');
 function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
+        console.log(value);
         if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
             obj[value] = object[value];
-    });
+    });    
     return obj;
 }
 
@@ -304,9 +308,10 @@ var Place = require('../Models/Place.js');
 function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
+        console.log(value);
         if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
             obj[value] = object[value];
-    });
+    });    
     return obj;
 }
 
@@ -376,9 +381,10 @@ var Room = require('../Models/Room.js');
 function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
+        console.log(value);
         if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
             obj[value] = object[value];
-    });
+    });    
     return obj;
 }
 
@@ -448,9 +454,10 @@ var Ticket = require('../Models/Ticket.js');
 function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
+        console.log(value);
         if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
             obj[value] = object[value];
-    });
+    });    
     return obj;
 }
 

@@ -56,12 +56,12 @@ module.exports.generate = function(name, schema) {
         }
     };
     var output = mustache.render(template.toString(), view);
-    console.log(output + "\n");
+    //console.log(output + "\n");
 
     db.serialize(function() {
         if (newTable.length > 0) {
             db.run(newTable);
-            console.log(newTable);
+            //console.log(newTable);
         }
         db.run(output);
     });
