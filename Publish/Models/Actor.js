@@ -1,4 +1,4 @@
-var database = require('../Database/sqlite.js')('../Database/projeto_dbm.db');
+var database = require('../Database/sqlite.js')('./Publish/Database/projeto_dbm.db');
 
 class Actor {
     constructor (name,decription,awards,gender,height,weight,curiosities) {
@@ -32,7 +32,9 @@ Actor.mappingDBtoObject = {
 
 Actor.all = function (callback) {
     //fazer a chamada a  funcao all do database
-    database.all('SELECT * FROM Actor',Actor,callback);
+    database.where('SELECT * FROM Actor',[], Actor, function(rows){
+        callback(rows);
+    });
 }
 
 /**
@@ -40,7 +42,9 @@ Actor.all = function (callback) {
 */
 Actor.get = function (id, callback) {
     //fazer a chamada a  funcao get do database
-    database.get('SELECT * FROM Actor WHERE actor_id = ?',[id],Actor,callback);
+    database.where('SELECT * FROM Actor WHERE actor_id = ?',[id],Actor,function(rows){
+        callback(rows);
+    });
 }
 
 /**
@@ -49,10 +53,14 @@ Actor.get = function (id, callback) {
 Actor.prototype.save = function (callback) {
     if(this.id) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
-        database.run('UPDATE Actor SET name = ?, decription = ?, awards = ?, gender = ?, height = ?, weight = ?, curiosities = ? WHERE actor_id = ?',[this.name,this.decription,this.awards,this.gender,this.height,this.weight,this.curiosities,this.id],callback);
+        database.run('UPDATE Actor SET name = ?, decription = ?, awards = ?, gender = ?, height = ?, weight = ?, curiosities = ? WHERE actor_id = ?',[this.name,this.decription,this.awards,this.gender,this.height,this.weight,this.curiosities,this.id],function(rows){
+            callback(rows);
+        });
     } else { //caso contrÃ¡rio para insert
         //fazer a chamada a  funcao run do database para inserir o registo
-        database.run('INSERT INTO Actor (name,decription,awards,gender,height,weight,curiosities) VALUES (?,?,?,?,?,?,?)',[this.name,this.decription,this.awards,this.gender,this.height,this.weight,this.curiosities],callback);
+        database.run('INSERT INTO Actor (name,decription,awards,gender,height,weight,curiosities) VALUES (?,?,?,?,?,?,?)',[this.name,this.decription,this.awards,this.gender,this.height,this.weight,this.curiosities],function(rows){
+            callback(rows);
+        });
     }
 }
 
@@ -61,7 +69,9 @@ Actor.prototype.save = function (callback) {
 */
 Actor.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM Actor WHERE actor_id = ?',[id],Actor,callback);
+    database.run('DELETE * FROM Actor WHERE actor_id = ?',[id],Actor,function(rows){
+        callback(rows);
+    });
 } 
 
 module.exports = Actor;

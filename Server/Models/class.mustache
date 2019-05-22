@@ -1,4 +1,4 @@
-var database = require('../Database/sqlite.js')('../Database/{{dbname}}');
+var database = require('../Database/sqlite.js')('./Publish/Database/{{dbname}}');
 
 class {{classTitle}} {
     constructor ({{classProperties}}) {
@@ -26,7 +26,9 @@ class {{classTitle}} {
 
 {{classTitle}}.all = function (callback) {
     //fazer a chamada a  funcao all do database
-    database.all('SELECT * FROM {{classTitle}}',{{classTitle}},callback);
+    database.where('SELECT * FROM {{classTitle}}',[], {{classTitle}}, function(rows){
+        callback(rows);
+    });
 }
 
 /**
@@ -34,7 +36,9 @@ class {{classTitle}} {
 */
 {{classTitle}}.get = function (id, callback) {
     //fazer a chamada a  funcao get do database
-    database.get('SELECT * FROM {{classTitle}} WHERE {{classTitleLower}}_id = ?',[id],{{classTitle}},callback);
+    database.where('SELECT * FROM {{classTitle}} WHERE {{classTitleLower}}_id = ?',[id],{{classTitle}},function(rows){
+        callback(rows);
+    });
 }
 
 /**
@@ -43,10 +47,14 @@ class {{classTitle}} {
 {{classTitle}}.prototype.save = function (callback) {
     if(this.{{primaryKey.name}}) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
-        database.run('UPDATE {{classTitle}} SET {{{updateProps}}} WHERE {{classTitleLower}}_id = ?',[{{conditions}},this.id],callback);
+        database.run('UPDATE {{classTitle}} SET {{{updateProps}}} WHERE {{classTitleLower}}_id = ?',[{{conditions}},this.id],function(rows){
+            callback(rows);
+        });
     } else { //caso contrÃ¡rio para insert
         //fazer a chamada a  funcao run do database para inserir o registo
-        database.run('INSERT INTO {{classTitle}} ({{columns}}) VALUES ({{values}})',[{{conditions}}],callback);
+        database.run('INSERT INTO {{classTitle}} ({{columns}}) VALUES ({{values}})',[{{conditions}}],function(rows){
+            callback(rows);
+        });
     }
 }
 
@@ -55,7 +63,9 @@ class {{classTitle}} {
 */
 {{classTitle}}.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM {{classTitle}} WHERE {{classTitleLower}}_id = ?',[id],{{classTitle}},callback);
+    database.run('DELETE * FROM {{classTitle}} WHERE {{classTitleLower}}_id = ?',[id],{{classTitle}},function(rows){
+        callback(rows);
+    });
 } 
 
 module.exports = {{classTitle}};

@@ -1,4 +1,4 @@
-var database = require('../Database/sqlite.js')('../Database/projeto_dbm.db');
+var database = require('../Database/sqlite.js')('./Publish/Database/projeto_dbm.db');
 
 class Category {
     constructor (type) {
@@ -19,7 +19,9 @@ Category.mappingDBtoObject = {
 
 Category.all = function (callback) {
     //fazer a chamada a  funcao all do database
-    database.all('SELECT * FROM Category',Category,callback);
+    database.where('SELECT * FROM Category',[], Category, function(rows){
+        callback(rows);
+    });
 }
 
 /**
@@ -27,7 +29,9 @@ Category.all = function (callback) {
 */
 Category.get = function (id, callback) {
     //fazer a chamada a  funcao get do database
-    database.get('SELECT * FROM Category WHERE category_id = ?',[id],Category,callback);
+    database.where('SELECT * FROM Category WHERE category_id = ?',[id],Category,function(rows){
+        callback(rows);
+    });
 }
 
 /**
@@ -36,10 +40,14 @@ Category.get = function (id, callback) {
 Category.prototype.save = function (callback) {
     if(this.id) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
-        database.run('UPDATE Category SET type = ? WHERE category_id = ?',[this.type,this.id],callback);
+        database.run('UPDATE Category SET type = ? WHERE category_id = ?',[this.type,this.id],function(rows){
+            callback(rows);
+        });
     } else { //caso contrÃ¡rio para insert
         //fazer a chamada a  funcao run do database para inserir o registo
-        database.run('INSERT INTO Category (type) VALUES (?)',[this.type],callback);
+        database.run('INSERT INTO Category (type) VALUES (?)',[this.type],function(rows){
+            callback(rows);
+        });
     }
 }
 
@@ -48,7 +56,9 @@ Category.prototype.save = function (callback) {
 */
 Category.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM Category WHERE category_id = ?',[id],Category,callback);
+    database.run('DELETE * FROM Category WHERE category_id = ?',[id],Category,function(rows){
+        callback(rows);
+    });
 } 
 
 module.exports = Category;
