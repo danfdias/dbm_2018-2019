@@ -14,9 +14,10 @@ var {{controllerTitle}} = require('../Models/{{controllerTitle}}.js');
 function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
+        console.log(value);
         if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
             obj[value] = object[value];
-    });
+    });    
     return obj;
 }
 

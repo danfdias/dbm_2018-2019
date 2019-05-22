@@ -1,9 +1,11 @@
 var express = require("express");
 var bodyParser = require('body-parser');
 var app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
 var api = require('./Controllers/api.js');
+
 app.use('/api',api);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json);
 
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/public/" + "index.html");

@@ -14,10 +14,6 @@
     ],
     "references": [
         {
-            "model": "Place",
-            "relation": "1-M"
-        },
-        {
             "model": "Movie",
             "relation": "1-M"
         }

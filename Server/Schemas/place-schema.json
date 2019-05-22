@@ -17,8 +17,10 @@
         "chair_number",
         "row"
     ],
-    "relation": {
-        "model": "Ticket",
-        "relation": "1-1"
-    }
+    "references": [
+        {
+            "model": "Room",
+            "relation": "1-M"
+        }
+    ]
 }
