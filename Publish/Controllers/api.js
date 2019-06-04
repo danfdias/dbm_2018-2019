@@ -1,6 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
+/**
+* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada
+* @param {any} object Representa o objeto retornado pela query à abse de dados
+* @param {any} type Representa o tipo de objeto que se pretende converter
+* @returns Devolve um objeto do tipo 'type' com o conteúdo que está no objeto 'object'
+*/
+function mapping(object, type) {
+   var obj = new type();
+   Object.keys(object).forEach(function (value) {
+        //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
+        if (obj.hasOwnProperty(value)){
+           obj[value] = object[value];
+        }
+   });
+   return obj;
+}
+
 /************************************************************************************************************************************/
 /**************************************************** Actor ***********************************************************/
 /************************************************************************************************************************************/
@@ -8,27 +25,11 @@ var router = express.Router();
 var Actor = require('../Models/Actor.js');
 
 /**
-* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada
-* @param {any} object Representa o objeto retornado pela query à abse de dados
-* @param {any} type Representa o tipo de objeto que se pretende converter
-* @returns Devolve um objeto do tipo "type" com o conteúdo que está no objeto "object"
-*/
-function mapping(object, type) {
-    var obj = new type();
-    Object.keys(object).forEach(function (value) {
-        console.log(value);
-        if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-            obj[value] = object[value];
-    });    
-    return obj;
-}
-
-/**
 * rota que chama a funcao save para fazer um insert a tabela Actor
 */
 router.post('/Actor', function (req, res) {
     mapping(req.body, Actor).save(function(){
-        res.send('insert');
+        res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
 
@@ -37,7 +38,7 @@ router.post('/Actor', function (req, res) {
 */
 router.get('/Actor', function (req, res) {
     Actor.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(rows);
+        res.json(JSON.stringify(rows));
     });
 });
 
@@ -46,7 +47,7 @@ router.get('/Actor', function (req, res) {
 */
 router.get('/Actor/:id', function (req, res) {
     Actor.get(req.params.id, function (row) {
-        res.json(row);
+        res.json(JSON.stringify(row));
     });
 });
 
@@ -73,7 +74,6 @@ router.delete('/Actor/:id', function (req, res) {
         });
     });
 });
-
 /************************************************************************************************************************************/
 /**************************************************** Category ***********************************************************/
 /************************************************************************************************************************************/
@@ -81,27 +81,11 @@ router.delete('/Actor/:id', function (req, res) {
 var Category = require('../Models/Category.js');
 
 /**
-* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada
-* @param {any} object Representa o objeto retornado pela query à abse de dados
-* @param {any} type Representa o tipo de objeto que se pretende converter
-* @returns Devolve um objeto do tipo "type" com o conteúdo que está no objeto "object"
-*/
-function mapping(object, type) {
-    var obj = new type();
-    Object.keys(object).forEach(function (value) {
-        console.log(value);
-        if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-            obj[value] = object[value];
-    });    
-    return obj;
-}
-
-/**
 * rota que chama a funcao save para fazer um insert a tabela Category
 */
 router.post('/Category', function (req, res) {
     mapping(req.body, Category).save(function(){
-        res.send('insert');
+        res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
 
@@ -110,7 +94,7 @@ router.post('/Category', function (req, res) {
 */
 router.get('/Category', function (req, res) {
     Category.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(rows);
+        res.json(JSON.stringify(rows));
     });
 });
 
@@ -119,7 +103,7 @@ router.get('/Category', function (req, res) {
 */
 router.get('/Category/:id', function (req, res) {
     Category.get(req.params.id, function (row) {
-        res.json(row);
+        res.json(JSON.stringify(row));
     });
 });
 
@@ -146,7 +130,6 @@ router.delete('/Category/:id', function (req, res) {
         });
     });
 });
-
 /************************************************************************************************************************************/
 /**************************************************** Director ***********************************************************/
 /************************************************************************************************************************************/
@@ -154,27 +137,11 @@ router.delete('/Category/:id', function (req, res) {
 var Director = require('../Models/Director.js');
 
 /**
-* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada
-* @param {any} object Representa o objeto retornado pela query à abse de dados
-* @param {any} type Representa o tipo de objeto que se pretende converter
-* @returns Devolve um objeto do tipo "type" com o conteúdo que está no objeto "object"
-*/
-function mapping(object, type) {
-    var obj = new type();
-    Object.keys(object).forEach(function (value) {
-        console.log(value);
-        if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-            obj[value] = object[value];
-    });    
-    return obj;
-}
-
-/**
 * rota que chama a funcao save para fazer um insert a tabela Director
 */
 router.post('/Director', function (req, res) {
     mapping(req.body, Director).save(function(){
-        res.send('insert');
+        res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
 
@@ -183,7 +150,7 @@ router.post('/Director', function (req, res) {
 */
 router.get('/Director', function (req, res) {
     Director.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(rows);
+        res.json(JSON.stringify(rows));
     });
 });
 
@@ -192,7 +159,7 @@ router.get('/Director', function (req, res) {
 */
 router.get('/Director/:id', function (req, res) {
     Director.get(req.params.id, function (row) {
-        res.json(row);
+        res.json(JSON.stringify(row));
     });
 });
 
@@ -219,7 +186,6 @@ router.delete('/Director/:id', function (req, res) {
         });
     });
 });
-
 /************************************************************************************************************************************/
 /**************************************************** Movie ***********************************************************/
 /************************************************************************************************************************************/
@@ -227,27 +193,11 @@ router.delete('/Director/:id', function (req, res) {
 var Movie = require('../Models/Movie.js');
 
 /**
-* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada
-* @param {any} object Representa o objeto retornado pela query à abse de dados
-* @param {any} type Representa o tipo de objeto que se pretende converter
-* @returns Devolve um objeto do tipo "type" com o conteúdo que está no objeto "object"
-*/
-function mapping(object, type) {
-    var obj = new type();
-    Object.keys(object).forEach(function (value) {
-        console.log(value);
-        if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-            obj[value] = object[value];
-    });    
-    return obj;
-}
-
-/**
 * rota que chama a funcao save para fazer um insert a tabela Movie
 */
 router.post('/Movie', function (req, res) {
     mapping(req.body, Movie).save(function(){
-        res.send('insert');
+        res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
 
@@ -256,7 +206,7 @@ router.post('/Movie', function (req, res) {
 */
 router.get('/Movie', function (req, res) {
     Movie.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(rows);
+        res.json(JSON.stringify(rows));
     });
 });
 
@@ -265,7 +215,7 @@ router.get('/Movie', function (req, res) {
 */
 router.get('/Movie/:id', function (req, res) {
     Movie.get(req.params.id, function (row) {
-        res.json(row);
+        res.json(JSON.stringify(row));
     });
 });
 
@@ -292,7 +242,6 @@ router.delete('/Movie/:id', function (req, res) {
         });
     });
 });
-
 /************************************************************************************************************************************/
 /**************************************************** Place ***********************************************************/
 /************************************************************************************************************************************/
@@ -300,27 +249,11 @@ router.delete('/Movie/:id', function (req, res) {
 var Place = require('../Models/Place.js');
 
 /**
-* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada
-* @param {any} object Representa o objeto retornado pela query à abse de dados
-* @param {any} type Representa o tipo de objeto que se pretende converter
-* @returns Devolve um objeto do tipo "type" com o conteúdo que está no objeto "object"
-*/
-function mapping(object, type) {
-    var obj = new type();
-    Object.keys(object).forEach(function (value) {
-        console.log(value);
-        if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-            obj[value] = object[value];
-    });    
-    return obj;
-}
-
-/**
 * rota que chama a funcao save para fazer um insert a tabela Place
 */
 router.post('/Place', function (req, res) {
     mapping(req.body, Place).save(function(){
-        res.send('insert');
+        res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
 
@@ -329,7 +262,7 @@ router.post('/Place', function (req, res) {
 */
 router.get('/Place', function (req, res) {
     Place.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(rows);
+        res.json(JSON.stringify(rows));
     });
 });
 
@@ -338,7 +271,7 @@ router.get('/Place', function (req, res) {
 */
 router.get('/Place/:id', function (req, res) {
     Place.get(req.params.id, function (row) {
-        res.json(row);
+        res.json(JSON.stringify(row));
     });
 });
 
@@ -365,7 +298,6 @@ router.delete('/Place/:id', function (req, res) {
         });
     });
 });
-
 /************************************************************************************************************************************/
 /**************************************************** Room ***********************************************************/
 /************************************************************************************************************************************/
@@ -373,27 +305,11 @@ router.delete('/Place/:id', function (req, res) {
 var Room = require('../Models/Room.js');
 
 /**
-* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada
-* @param {any} object Representa o objeto retornado pela query à abse de dados
-* @param {any} type Representa o tipo de objeto que se pretende converter
-* @returns Devolve um objeto do tipo "type" com o conteúdo que está no objeto "object"
-*/
-function mapping(object, type) {
-    var obj = new type();
-    Object.keys(object).forEach(function (value) {
-        console.log(value);
-        if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-            obj[value] = object[value];
-    });    
-    return obj;
-}
-
-/**
 * rota que chama a funcao save para fazer um insert a tabela Room
 */
 router.post('/Room', function (req, res) {
     mapping(req.body, Room).save(function(){
-        res.send('insert');
+        res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
 
@@ -402,7 +318,7 @@ router.post('/Room', function (req, res) {
 */
 router.get('/Room', function (req, res) {
     Room.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(rows);
+        res.json(JSON.stringify(rows));
     });
 });
 
@@ -411,7 +327,7 @@ router.get('/Room', function (req, res) {
 */
 router.get('/Room/:id', function (req, res) {
     Room.get(req.params.id, function (row) {
-        res.json(row);
+        res.json(JSON.stringify(row));
     });
 });
 
@@ -438,7 +354,6 @@ router.delete('/Room/:id', function (req, res) {
         });
     });
 });
-
 /************************************************************************************************************************************/
 /**************************************************** Ticket ***********************************************************/
 /************************************************************************************************************************************/
@@ -446,27 +361,11 @@ router.delete('/Room/:id', function (req, res) {
 var Ticket = require('../Models/Ticket.js');
 
 /**
-* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada
-* @param {any} object Representa o objeto retornado pela query à abse de dados
-* @param {any} type Representa o tipo de objeto que se pretende converter
-* @returns Devolve um objeto do tipo "type" com o conteúdo que está no objeto "object"
-*/
-function mapping(object, type) {
-    var obj = new type();
-    Object.keys(object).forEach(function (value) {
-        console.log(value);
-        if (obj.hasOwnProperty(value)) //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-            obj[value] = object[value];
-    });    
-    return obj;
-}
-
-/**
 * rota que chama a funcao save para fazer um insert a tabela Ticket
 */
 router.post('/Ticket', function (req, res) {
     mapping(req.body, Ticket).save(function(){
-        res.send('insert');
+        res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
 
@@ -475,7 +374,7 @@ router.post('/Ticket', function (req, res) {
 */
 router.get('/Ticket', function (req, res) {
     Ticket.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(rows);
+        res.json(JSON.stringify(rows));
     });
 });
 
@@ -484,7 +383,7 @@ router.get('/Ticket', function (req, res) {
 */
 router.get('/Ticket/:id', function (req, res) {
     Ticket.get(req.params.id, function (row) {
-        res.json(row);
+        res.json(JSON.stringify(row));
     });
 });
 
@@ -510,4 +409,6 @@ router.delete('/Ticket/:id', function (req, res) {
             success: !err
         });
     });
-});module.exports = router;
+});
+
+module.exports = router;
