@@ -1,0 +1,23 @@
+
+/************************************************************************************************************************************/
+/*************************************************** BackOffice Rotas **********************************************************/
+/************************************************************************************************************************************/
+
+var {{controllerTitle}} = require('../Models/{{controllerTitle}}.js');
+
+router.get('/{{controllerTitle}}', function (req, res) {
+    {{controllerTitle}}.all(function(elements){
+        console.log(elements.length);
+        console.log(elements);        
+        var rows = new Array();
+        /*elements.foreach(function(element){
+            console.log(element);
+        });*/
+    });
+/*
+    res.render('', {
+        title: controllerTitle,
+        columns: ,
+        rows:
+    })*/
+});

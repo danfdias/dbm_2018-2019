@@ -3,7 +3,8 @@ var mkdirp = require('mkdirp');
 var del = require('del');
 var classGenerator = require('./Models/generate-class.js');
 var dbGenerator = require('./database/generate-database.js');
-var genController = require('./Controller/generate-controller.js');
+var genController = require('./Controllers/generate-controller.js');
+var genBackOffice = require('./BackOffice/generate-backoffice.js');
 var path = require('path');
 var mustache = require('mustache');
 var child_process = require('child_process');
@@ -63,16 +64,45 @@ function generateFolders() {
     });
 
     //Criar roteamento RestulAPI do novo servidor
-    var controller = "var express = require('express');\nvar router = express.Router();";
+    var controller = "var express = require('express');\nvar router = express.Router();\n\n" +
+    "/**\n" +
+    "* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada\n" +
+    "* @param {any} object Representa o objeto retornado pela query à abse de dados\n" +
+    "* @param {any} type Representa o tipo de objeto que se pretende converter\n" +
+    "* @returns Devolve um objeto do tipo 'type' com o conteúdo que está no objeto 'object'\n" +
+    "*/\n" +
+    "function mapping(object, type) {\n" +
+    "   var obj = new type();\n" +
+    "   Object.keys(object).forEach(function (value) {\n" +
+    "        //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados\n" +
+    "        if (obj.hasOwnProperty(value)){\n" +
+    "           obj[value] = object[value];\n" +
+    "        }\n" +
+    "   });\n" +
+    "   return obj;\n" +
+    "}\n";
     config.schemas.forEach(function (schema) {
         const classSchema = JSON.parse(fs.readFileSync(schema['path']));
         controller += "\n" + genController.generateController(classSchema);
     });
-    controller += 'module.exports = router;';
+    controller += '\n\nmodule.exports = router;';
     fs.writeFile('./Publish/Controllers/api.js', controller, function (err) {
         if (err) throw err;
         console.log('Controllers Published!\n');
     });
+
+    //Gerar BackOffice
+    var controllerBackOffice = "var express = require('express');\nvar router = express.Router();";
+    config.schemas.forEach(function (schema) {
+        const classSchema = JSON.parse(fs.readFileSync(schema['path']));
+        controllerBackOffice += genBackOffice.generateBackOffice(classSchema);
+    });    
+    controllerBackOffice += '\n\nmodule.exports = router;';
+    fs.writeFile('./Publish/Controllers/backOffice.js', controllerBackOffice, function (err) {
+        if (err) throw err;
+        console.log('BackOffice Published!\n');        
+    });
+    
 
     // Executar server.js
     child_process.fork('./Publish/index.js');
