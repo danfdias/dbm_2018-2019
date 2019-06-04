@@ -31,8 +31,14 @@
             "path": "./Server/Schemas/ticket-schema.json"
         }
     ],
-    "staticFiles": [{
-        "originalPath":"./Server/Database/sqlite.js",
-        "destinationPath":"./Publish/Database/sqlite.js"
-    }]
+    "staticFiles": [
+        {
+            "originalPath": "./Server/Database/sqlite.js",
+            "destinationPath": "./Publish/Database/sqlite.js"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/list.mustache",
+            "destinationPath": "./Publish/Views/list.mustache"
+        }
+    ]
 }
