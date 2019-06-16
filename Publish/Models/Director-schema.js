@@ -1,4 +1,4 @@
-{
+module.exports = {
     "title": "Director",
     "description": "Director that produces the movie",
     "type": "object",

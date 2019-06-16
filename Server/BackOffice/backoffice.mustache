@@ -1,23 +1,244 @@
-
 /************************************************************************************************************************************/
 /*************************************************** BackOffice Rotas **********************************************************/
 /************************************************************************************************************************************/
+var express = require('express');
+var bodyParser = require('body-parser');
+var backofficeRouter = express.Router();
 
-var {{controllerTitle}} = require('../Models/{{controllerTitle}}.js');
+{{#controllers}}
+/************************************************************************************************************************************/
+/*************************************************** {{controllerTitle}} **********************************************************/
+/************************************************************************************************************************************/
 
-router.get('/{{controllerTitle}}', function (req, res) {
-    {{controllerTitle}}.all(function(elements){
-        console.log(elements.length);
-        console.log(elements);        
-        var rows = new Array();
-        /*elements.foreach(function(element){
-            console.log(element);
-        });*/
+var {{controllerTitleLower}} = require('../Models/{{controllerTitle}}.js');
+var {{controllerTitleLower}}Schema = require('../Models/{{controllerTitle}}-schema.js');
+
+/**
+ * Rota que faz render do ficheiro list.mustache com a informação devolvida pela função
+ * all da classe {{controllerTitle}}
+ *
+ */
+backofficeRouter.get('/{{controllerTitle}}',function(req,res) {
+    
+    {{controllerTitleLower}}.all(function (rows) {
+        res.render('list', {
+            title: '{{controllerTitle}}',
+             cssPath: "http://localhost:8082/style.css",
+            rows: rows.map(obj => {
+                return {
+                    properties: Object.keys(obj).map(key => {
+                        return {
+                            name: key,
+                            value: obj[key]
+                        }
+                    }),
+                    actions: [{
+                        label: '',
+                        link: './{{controllerTitle}}/Detalhe/' + obj.id,
+                        image: {
+                            src: '../images/read.png'
+                        },
+                        tooltip: 'Detalhe'
+                    }, {
+                        label: '',
+                        link: './{{controllerTitle}}/Editar/' + obj.id,
+                        image: {
+                            src: '../images/edit.png'
+                        },
+                        tooltip: 'Editar'
+                    }, {
+                        label: '',
+                        link: '#',
+                        image: {
+                            src: '../images/delete.png'
+                        },
+                        tooltip: 'Apagar',
+                        events: [{
+                            name: "onclick",
+                            function: "apagar",
+                            args: obj.id
+                        }]
+
+                    }]
+                }
+            }),
+            columns: Object.keys(new {{controllerTitle}}()).map(key => {
+                return {
+                    name: key
+                };
+            })
+        });
     });
-/*
-    res.render('', {
-        title: controllerTitle,
-        columns: ,
-        rows:
-    })*/
 });
+
+/**
+ * Rota que faz render do ficheiro details.mustache com a informação devolvida pela função
+ * get da classe {{controllerTitle}}
+ *
+ */
+backofficeRouter.get('/{{controllerTitle}}/Detalhe/:id', function (req, res) {
+    {{controllerTitleLower}}.get(req.params.id, function (row) {
+    res.render('details', {
+        properties: function () {
+        var allProps = Object.getOwnPropertyNames(row);
+        var validProps = [];
+        allProps.forEach(function (prop) {
+            if ({{controllerTitle}}Schema.properties.hasOwnProperty(prop)) {
+                validProps.push({
+                name: prop,
+                value: row[prop]
+                });
+            }
+        });
+        return validProps;
+    },
+    cssPath: "http://localhost:8082/style.css",
+    references: function () {
+    var allRefs = [];
+    if ({{controllerTitle}}Schema.references) {
+        {{controllerTitle}}Schema.references.forEach(function (ref) {
+        allRefs.push({
+            label: ref.label,
+            model: "{{controllerTitle}}",
+            values: ref.relation == "M-M" ? req.params.id + '/' + ref.model :
+            row[(ref.model + "_id").toLowerCase()]
+        });
+        });
+    }
+    return allRefs;
+    },
+    get hasReferences() {
+        return this.references().length > 0;
+    }
+    })
+    });
+});
+
+/**
+ * Rota que faz render do ficheiro form1.mustache que consite no fomulario de inserção de um elemento
+ * to tipo {{controllerTitle}}
+ *
+ */
+backofficeRouter.get('/{{controllerTitle}}/Inserir',function(req,res) {
+   var props =  Object.getOwnPropertyNames(new {{controllerTitle}}()).map(key => {
+                        if(Object.keys({{controllerTitle}}Schema.properties).includes(key)){
+                        var typeAux = {{controllerTitle}}Schema.properties[key].type;
+                        if(typeAux === 'integer'){
+                            typeAux = 'number';
+                        }else if(typeAux === 'string')typeAux = 'text';
+                        var obj = {
+                            name: key,
+                            required : {{controllerTitle}}Schema.required.includes(key),
+                            type: typeAux,
+                            min : {{controllerTitle}}Schema.properties[key].minimum,
+                            max : {{controllerTitle}}Schema.properties[key].maximum
+                        }        
+
+                        return obj;
+                        }
+            });
+    var propsaux = [];
+    for(var i = 0;i<props.length;i++){
+        if(props[i] !== void 0 && props[i].name.substr(props[i].name.length - 2) !== "id"){
+            propsaux.push(props[i]);
+        }
+    }
+
+    res.render('form1', {
+            title: '{{controllerTitle}}',
+            cssPath: "http://localhost:8082/style.css",
+            properties: propsaux,
+            references: function () {
+    var allRefs = [];
+    if ({{controllerTitle}}Schema.references) {
+        var i = 1;
+        {{controllerTitle}}Schema.references.forEach(function (ref) {
+        allRefs.push({
+            label: ref.label,
+            model: ref.model,
+            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
+            selectId:"selection" + i
+        });i++;
+        });
+    }
+    return allRefs;
+    },
+    get hasReferences() {
+        return this.references().length > 0;
+    }
+            }
+        )
+});
+
+/**
+ * Rota que faz render do ficheiro form2.mustache que consite no fomulario de editar um elemento
+ * to tipo {{controllerTitle}}
+ *
+ */
+backofficeRouter.get('/{{controllerTitle}}/Editar/:id',function(req,res) {
+    {{controllerTitleLower}}.get(req.params.id,function (row) {
+        console.log(row);
+    var props =  Object.getOwnPropertyNames(new {{controllerTitle}}()).map(key => {
+                        if(Object.keys({{controllerTitle}}Schema.properties).includes(key)){
+                        var typeAux = {{controllerTitle}}Schema.properties[key].type;
+                        if(typeAux === 'integer'){
+                            typeAux = 'number';
+                        }else if(typeAux === 'string')typeAux = 'text';
+                        var obj = {
+                            name: key,
+                            val : row[key],
+                            required : {{controllerTitle}}Schema.required.includes(key),
+                            type: typeAux,
+                            min : {{controllerTitle}}Schema.properties[key].minimum,
+                            max : {{controllerTitle}}Schema.properties[key].maximum
+                        }        
+
+                        return obj;
+                        }
+            });
+    var propsaux = [];
+    for(var i = 0;i<props.length;i++){
+        if(props[i] !== void 0 && props[i].name.substr(props[i].name.length - 2) !== "id"){
+            propsaux.push(props[i]);
+        }
+    }
+
+    res.render('form2', {
+            title: '{{controllerTitle}}',
+            cssPath: "http://localhost:8082/style.css",
+            idClass: req.params.id,
+            properties: propsaux,
+            references: function () {
+                var allRefs = [];
+                if ({{controllerTitle}}Schema.references) {
+                    var i = 1;
+                    {{controllerTitle}}Schema.references.forEach(function (ref) {
+        allRefs.push({
+            label: ref.label,
+            model: ref.model,
+            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
+            selectId:"selection" + i
+        });i++;
+        });
+    }
+    return allRefs;
+    },
+    get hasReferences() {
+        return this.references().length > 0;
+    },
+    selected : function(){
+        var arr = [];
+        {{controllerTitle}}Schema.references.forEach(function (ref) { 
+            var aux =ref.model + "_id"; 
+            arr.push({idAux : row[aux]});
+            }
+            );
+        return arr;
+    }
+            }
+        )
+    });
+});
+
+{{/controllers}}
+module.exports = backofficeRouter;

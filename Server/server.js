@@ -26,16 +26,25 @@ function generateFolders() {
     // Criar pasta Database
     createDirectory('./Publish/Database');
     console.log('Folders have been created \n');
-    createFile('./Publish/Public', "index.html", 
-    "<!DOCTYPE html> \n<html lang='en'>\n<head> " + 
-    "<meta charset='UTF-8'> \n<link rel='stylesheet' type='text/css' href='css/default.css'>\n" +
-    "<title>Projeto DBM</title> \n</head> \n<body> \n<h1>Servidor Gerado!</h1> \n</body> \n</html>");
+    createFile('./Publish/Public', "index.html",
+        "<!DOCTYPE html> \n<html lang='en'>\n<head> " +
+        "<meta charset='UTF-8'> \n<link rel='stylesheet' type='text/css' href='css/default.css'>\n" +
+        "<title>Projeto DBM</title> \n</head> \n<body> \n<h1>Servidor Gerado!</h1> \n</body> \n</html>");
 
     // Gerar classes    
     // Ler ficheiro 'config.json'
     var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json')));
     classGenerator.createClasses(config);
     console.log('Models created \n');
+
+    config.schemas.forEach(function (schema) {
+        const classSchema = fs.readFileSync(schema['path']);     
+        var sch = JSON.parse(classSchema);
+        fs.writeFile('./Publish/Models/' + sch.title + '-schema.js', "module.exports = " + classSchema, function (err) {
+            if (err) throw err;
+            console.log('Saved!');
+        });
+    });
 
     // Criar DB
     config.schemas.forEach(function (schema) {
@@ -44,7 +53,7 @@ function generateFolders() {
     });
     console.log('DB created \n');
 
-    //Escrever copia do ficheiro sqlite
+    //Escrever ficheiros na publicacao
     var str = fs.readFileSync('./Server/server.mustache');
     var view = fs.readFileSync("./Server/config.json");
     for (var i = 0; i < config.staticFiles.length; i++) {
@@ -57,52 +66,36 @@ function generateFolders() {
 
     //Publicar index.js do novo servidor
     var output = mustache.render(str.toString(), JSON.parse(view));
-    //console.log("\n" + output + "\n");
     fs.writeFile('./Publish/index.js', output, function (err) {
         if (err)
             console.log(err);
     });
 
     //Criar roteamento RestulAPI do novo servidor
-    var controller = "var express = require('express');\nvar router = express.Router();\n\n" +
-    "/**\n" +
-    "* Método que faz o mapeamento entre um objeto retornado pelo módulo sqlite num objeto de uma classe criada\n" +
-    "* @param {any} object Representa o objeto retornado pela query à abse de dados\n" +
-    "* @param {any} type Representa o tipo de objeto que se pretende converter\n" +
-    "* @returns Devolve um objeto do tipo 'type' com o conteúdo que está no objeto 'object'\n" +
-    "*/\n" +
-    "function mapping(object, type) {\n" +
-    "   var obj = new type();\n" +
-    "   Object.keys(object).forEach(function (value) {\n" +
-    "        //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados\n" +
-    "        if (obj.hasOwnProperty(value)){\n" +
-    "           obj[value] = object[value];\n" +
-    "        }\n" +
-    "   });\n" +
-    "   return obj;\n" +
-    "}\n";
-    config.schemas.forEach(function (schema) {
-        const classSchema = JSON.parse(fs.readFileSync(schema['path']));
-        controller += "\n" + genController.generateController(classSchema);
-    });
-    controller += '\n\nmodule.exports = router;';
+    var controller = genController.generateController(config.schemas);
     fs.writeFile('./Publish/Controllers/api.js', controller, function (err) {
         if (err) throw err;
         console.log('Controllers Published!\n');
     });
 
     //Gerar BackOffice
-    var controllerBackOffice = "var express = require('express');\nvar router = express.Router();";
-    config.schemas.forEach(function (schema) {
-        const classSchema = JSON.parse(fs.readFileSync(schema['path']));
-        controllerBackOffice += genBackOffice.generateBackOffice(classSchema);
-    });    
-    controllerBackOffice += '\n\nmodule.exports = router;';
+    var controllerBackOffice = genBackOffice.generateBackOffice(config.schemas);
     fs.writeFile('./Publish/Controllers/backOffice.js', controllerBackOffice, function (err) {
         if (err) throw err;
-        console.log('BackOffice Published!\n');        
+        console.log('BackOffice Published!\n');
     });
-    
+    //Gerar FrontOffice
+    var controllerFrontOffice = genFrontOffice.generateFrontOffice(config);
+    fs.writeFile('./Publish/Controllers/frontOffice.js', controllerFrontOffice, function (err) {
+        if (err) throw err;
+        console.log('BackOffice Published!\n');
+    });    
+        
+    var styles = fs.readFileSync(req.body.style, "utf8");
+    fs.writeFile('./Publish/Public/Css/default.css', styles, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
 
     // Executar server.js
     child_process.fork('./Publish/index.js');
@@ -116,7 +109,7 @@ function createDirectory(path) {
     fs.mkdirSync(path);
 }
 
-function createFile(path, fileName, content){
+function createFile(path, fileName, content) {
     fs.writeFile(path + "/" + fileName, content, function (err) {
         if (err) throw err;
         console.log('File Created!\n');

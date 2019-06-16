@@ -1,4 +1,4 @@
-{
+module.exports = {
     "title": "Movie",
     "description": "Movie to be watched",
     "type": "object",

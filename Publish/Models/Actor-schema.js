@@ -1,4 +1,4 @@
-{
+module.exports = {
     "title": "Actor",
     "description": "Actor that participates in movies",
     "type": "object",

@@ -10,11 +10,19 @@ var template = fs.readFileSync(path.join(__dirname, 'controller.mustache'));
  * Funcao que gera o controller para um determinado schema
  * @param {any} schema Representa o schema recebido para ser gerado o controller
  */
-module.exports.generateController = function(schema) {
+module.exports.generateController = function(schemas) {
+    var controllers = new Array();
+    schemas.forEach(function (schema) {        
+        const classSchema = JSON.parse(fs.readFileSync(schema['path']));
+        controllers.push(
+            {
+                'controllerTitle': classSchema.title,
+                'controllerTitleLower': classSchema.title.toLowerCase()
+            }
+        );
+    });
     var view = {
-        controllerTitle: schema.title
+        controllers: controllers
     };
-
-    var output = mustache.render(template.toString(), view);
-    return output;
+    return mustache.render(template.toString(), view);
 }

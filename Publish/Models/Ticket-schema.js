@@ -1,4 +1,4 @@
-{
+module.exports = {
     "title": "Ticket",
     "description": "Cinema ticket for user to buy",
     "type": "object",

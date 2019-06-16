@@ -1,0 +1,49 @@
+var express = require('express');
+var bodyParser = require('body-parser');
+var frontofficeRouter = express.Router();
+var arr = [];
+{{#controllers}}
+    arr.push(
+        {
+            name: "{{controllerTitle}}",
+            href: "./backoffice/{{controllerTitle}}"
+        }
+    );    
+{{/controllers}}
+
+{{#controllers}}
+var {{controllerTitleLower}} = require('../Models/{{controllerTitle}}.js');
+var {{controllerTitleLower}}Schema = require('../Models/{{controllerTitle}}-schema.js');
+
+/**
+ * Rota da que vai fazer render do ficheiro frontoffice.mustache com a informação devolvida da função
+ * top da classe {{controllerTitle}}
+ *
+ */
+frontofficeRouter.get('/',function(req,res) {
+    {{controllerTitleLower}}.top("{{controllerProperty}}", "{{controllerOrder}}", {{controllerLimit}}, function (rows) {
+        console.log(rows);
+        res.render('frontoffice', {
+            cssPath: "http://localhost:8082/style.css",
+        models:  arr,
+        rows: rows.map(obj => {
+        return {
+            properties: Object.keys(obj).map(key => {
+                return {
+                    name: key,
+                    value: obj[key]
+            }
+        })
+        }
+    }),
+    columns: Object.keys(new {{controllerTitle}}()).map(key => {
+        return {
+            name: key
+        };
+    })
+});
+});
+});
+{{/controllers}}
+
+module.exports = frontofficeRouter;

@@ -1,0 +1,25 @@
+<html>
+<head>
+{{>cssMus}}
+</head>
+    <body>
+
+        {{>menu}}
+        <table>
+            <tr>
+            {{#columns}}
+            <th>{{name}}</th>
+            {{/columns}}
+            </tr>
+            {{#rows}}
+            <tr>
+            {{#properties}}
+            <td>
+            {{value}}
+            </td>
+            {{/properties}}
+            </tr>
+            {{/rows}}
+        </table>
+    </body>
+</html>

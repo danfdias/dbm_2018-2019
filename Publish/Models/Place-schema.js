@@ -1,4 +1,4 @@
-{
+module.exports = {
     "title": "Place",
     "description": "The place that users sits to watch the movie",
     "type": "object",
