@@ -3,13 +3,13 @@ module.exports = {
     "description": "Room where user see a movie",
     "type": "object",
     "properties": {
-        "numero": {
+        "number": {
             "description": "Number of the room",
             "type": "integer"
         }
     },
     "required": [
-        "numero"
+        "number"
     ],
     "references": [
         {

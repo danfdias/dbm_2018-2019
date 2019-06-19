@@ -11,13 +11,23 @@
             "description": "A description of the director",
             "type": "string"
         },
+        "gender": {
+            "description": "The gender of the director",
+            "type": "string"
+        },
         "awards": {
             "description": "Awards that the director have",
+            "type": "number"
+        },
+        "image": {
+            "description": "Image that the director have",
             "type": "string"
         }
     },
     "required": [
         "name",
-        "decription"
+        "decription",
+        "awards",
+        "gender"
     ]
 }

@@ -16,8 +16,8 @@
             "type": "number"
         },
         "awards": {
-            "description": "Awards that movie have",
-            "type": "string"
+            "description": "Awards that movie has",
+            "type": "number"
         },
         "language": {
             "description": "The language of the movie",
@@ -32,7 +32,11 @@
             "type": "string"
         },
         "age_restriction": {
-            "description": "The restriction of age that movie have",
+            "description": "The restriction of age that movie has",
+            "type": "string"
+        },
+        "image": {
+            "description": "The image that movie has",
             "type": "string"
         }
     },

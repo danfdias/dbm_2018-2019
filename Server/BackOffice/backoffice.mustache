@@ -36,21 +36,21 @@ backofficeRouter.get('/{{controllerTitle}}',function(req,res) {
                         label: '',
                         link: './{{controllerTitle}}/Detalhe/' + obj.id,
                         image: {
-                            src: '../images/read.png'
+                            src: '../Images/read.png'
                         },
                         tooltip: 'Detalhe'
                     }, {
                         label: '',
                         link: './{{controllerTitle}}/Editar/' + obj.id,
                         image: {
-                            src: '../images/edit.png'
+                            src: '../Images/edit.png'
                         },
                         tooltip: 'Editar'
                     }, {
                         label: '',
                         link: '#',
                         image: {
-                            src: '../images/delete.png'
+                            src: '../Images/delete.png'
                         },
                         tooltip: 'Apagar',
                         events: [{
@@ -62,7 +62,7 @@ backofficeRouter.get('/{{controllerTitle}}',function(req,res) {
                     }]
                 }
             }),
-            columns: Object.keys(new {{controllerTitle}}()).map(key => {
+            columns: Object.keys(new {{controllerTitleLower}}()).map(key => {
                 return {
                     name: key
                 };
@@ -83,7 +83,7 @@ backofficeRouter.get('/{{controllerTitle}}/Detalhe/:id', function (req, res) {
         var allProps = Object.getOwnPropertyNames(row);
         var validProps = [];
         allProps.forEach(function (prop) {
-            if ({{controllerTitle}}Schema.properties.hasOwnProperty(prop)) {
+            if ({{controllerTitleLower}}Schema.properties.hasOwnProperty(prop)) {
                 validProps.push({
                 name: prop,
                 value: row[prop]
@@ -95,8 +95,8 @@ backofficeRouter.get('/{{controllerTitle}}/Detalhe/:id', function (req, res) {
     cssPath: "http://localhost:8082/style.css",
     references: function () {
     var allRefs = [];
-    if ({{controllerTitle}}Schema.references) {
-        {{controllerTitle}}Schema.references.forEach(function (ref) {
+    if ({{controllerTitleLower}}Schema.references) {
+        {{controllerTitleLower}}Schema.references.forEach(function (ref) {
         allRefs.push({
             label: ref.label,
             model: "{{controllerTitle}}",
@@ -120,18 +120,18 @@ backofficeRouter.get('/{{controllerTitle}}/Detalhe/:id', function (req, res) {
  *
  */
 backofficeRouter.get('/{{controllerTitle}}/Inserir',function(req,res) {
-   var props =  Object.getOwnPropertyNames(new {{controllerTitle}}()).map(key => {
-                        if(Object.keys({{controllerTitle}}Schema.properties).includes(key)){
-                        var typeAux = {{controllerTitle}}Schema.properties[key].type;
+   var props =  Object.getOwnPropertyNames(new {{controllerTitleLower}}()).map(key => {
+                        if(Object.keys({{controllerTitleLower}}Schema.properties).includes(key)){
+                        var typeAux = {{controllerTitleLower}}Schema.properties[key].type;
                         if(typeAux === 'integer'){
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
                             name: key,
-                            required : {{controllerTitle}}Schema.required.includes(key),
+                            required : {{controllerTitleLower}}Schema.required.includes(key),
                             type: typeAux,
-                            min : {{controllerTitle}}Schema.properties[key].minimum,
-                            max : {{controllerTitle}}Schema.properties[key].maximum
+                            min : {{controllerTitleLower}}Schema.properties[key].minimum,
+                            max : {{controllerTitleLower}}Schema.properties[key].maximum
                         }        
 
                         return obj;
@@ -150,9 +150,9 @@ backofficeRouter.get('/{{controllerTitle}}/Inserir',function(req,res) {
             properties: propsaux,
             references: function () {
     var allRefs = [];
-    if ({{controllerTitle}}Schema.references) {
+    if ({{controllerTitleLower}}Schema.references) {
         var i = 1;
-        {{controllerTitle}}Schema.references.forEach(function (ref) {
+        {{controllerTitleLower}}Schema.references.forEach(function (ref) {
         allRefs.push({
             label: ref.label,
             model: ref.model,
@@ -178,19 +178,19 @@ backofficeRouter.get('/{{controllerTitle}}/Inserir',function(req,res) {
 backofficeRouter.get('/{{controllerTitle}}/Editar/:id',function(req,res) {
     {{controllerTitleLower}}.get(req.params.id,function (row) {
         console.log(row);
-    var props =  Object.getOwnPropertyNames(new {{controllerTitle}}()).map(key => {
-                        if(Object.keys({{controllerTitle}}Schema.properties).includes(key)){
-                        var typeAux = {{controllerTitle}}Schema.properties[key].type;
+    var props =  Object.getOwnPropertyNames(new {{controllerTitleLower}}()).map(key => {
+                        if(Object.keys({{controllerTitleLower}}Schema.properties).includes(key)){
+                        var typeAux = {{controllerTitleLower}}Schema.properties[key].type;
                         if(typeAux === 'integer'){
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
                             name: key,
                             val : row[key],
-                            required : {{controllerTitle}}Schema.required.includes(key),
+                            required : {{controllerTitleLower}}Schema.required.includes(key),
                             type: typeAux,
-                            min : {{controllerTitle}}Schema.properties[key].minimum,
-                            max : {{controllerTitle}}Schema.properties[key].maximum
+                            min : {{controllerTitleLower}}Schema.properties[key].minimum,
+                            max : {{controllerTitleLower}}Schema.properties[key].maximum
                         }        
 
                         return obj;
@@ -210,9 +210,9 @@ backofficeRouter.get('/{{controllerTitle}}/Editar/:id',function(req,res) {
             properties: propsaux,
             references: function () {
                 var allRefs = [];
-                if ({{controllerTitle}}Schema.references) {
+                if ({{controllerTitleLower}}Schema.references) {
                     var i = 1;
-                    {{controllerTitle}}Schema.references.forEach(function (ref) {
+                    {{controllerTitleLower}}Schema.references.forEach(function (ref) {
         allRefs.push({
             label: ref.label,
             model: ref.model,
@@ -228,7 +228,7 @@ backofficeRouter.get('/{{controllerTitle}}/Editar/:id',function(req,res) {
     },
     selected : function(){
         var arr = [];
-        {{controllerTitle}}Schema.references.forEach(function (ref) { 
+        {{controllerTitleLower}}Schema.references.forEach(function (ref) { 
             var aux =ref.model + "_id"; 
             arr.push({idAux : row[aux]});
             }

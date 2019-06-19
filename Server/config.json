@@ -7,12 +7,12 @@
             "path": "./Server/Schemas/actor-schema.json"
         },
         {
-            "name": "Category",
-            "path": "./Server/Schemas/category-schema.json"
-        },
-        {
             "name": "Director",
             "path": "./Server/Schemas/director-schema.json"
+        },
+        {
+            "name": "Category",
+            "path": "./Server/Schemas/category-schema.json"
         },
         {
             "name": "Movie",
@@ -31,34 +31,28 @@
             "path": "./Server/Schemas/ticket-schema.json"
         }
     ],
-    "frontOffice": [
+    "frontOffice": [        
         {
-            "model": "Produto",
-            "property": "preco",
-            "order": "DESC",
-            "limit": 5
-        },
-        {
-            "model": "Categoria",
-            "property": "descricao",
+            "model": "Movie",
+            "property": "imdb_pontuation",
             "order": "DESC",
             "limit": 10
         },
         {
-            "model": "Marca",
-            "property": "descricao",
+            "model": "Movie",
+            "property": "awards",
             "order": "DESC",
             "limit": 10
         },
         {
-            "model": "Venda",
-            "property": "valor_monetario",
+            "model": "Movie",
+            "property": "Budget",
             "order": "DESC",
             "limit": 10
         },
         {
-            "model": "Utilizador",
-            "property": "idade",
+            "model": "Actor",
+            "property": "awards",
             "order": "DESC",
             "limit": 10
         }
@@ -69,48 +63,48 @@
             "destinationPath": "./Publish/Database/sqlite.js"
         },
         {
-            "originalPath": "./Models/StaticFiles/details.mustache",
+            "originalPath": "./Server/StaticFiles/details.mustache",
             "destinationPath": "./Publish/Views/details.mustache"
         },
         {
-            "originalPath": "./Models/StaticFiles/form1.mustache",
+            "originalPath": "./Server/StaticFiles/form1.mustache",
             "destinationPath": "./Publish/Views/form1.mustache"
         },
         {
-            "originalPath": "./Models/StaticFiles/form2.mustache",
+            "originalPath": "./Server/StaticFiles/form2.mustache",
             "destinationPath": "./Publish/Views/form2.mustache"
         },
         {
-            "originalPath": "./Models/StaticFiles/list.mustache",
+            "originalPath": "./Server/StaticFiles/list.mustache",
             "destinationPath": "./Publish/Views/list.mustache"
         },
         {
-            "originalPath": "./Models/StaticFiles/welcome.mustache",
+            "originalPath": "./Server/StaticFiles/welcome.mustache",
             "destinationPath": "./Publish/Views/welcome.mustache"
         },
         {
-            "originalPath": "./Models/StaticFiles/delete.png",
+            "originalPath": "./Server/StaticFiles/delete.png",
             "destinationPath": "./Publish/Public/Images/delete.png"
         },
         {
-            "originalPath": "./Models/StaticFiles/edit.png",
+            "originalPath": "./Server/StaticFiles/edit.png",
             "destinationPath": "./Publish/Public/Images/edit.png"
         },
         {
-            "originalPath": "./Models/StaticFiles/read.png",
+            "originalPath": "./Server/StaticFiles/read.png",
             "destinationPath": "./Publish/Public/Images/read.png"
         },
         {
-            "originalPath": "./Models/StaticFiles/frontoffice.mustache",
+            "originalPath": "./Server/StaticFiles/frontoffice.mustache",
             "destinationPath": "./Publish/Views/frontoffice.mustache"
         },
         {
-            "originalPath": "./Models/StaticFiles/menu.mustache",
+            "originalPath": "./Server/StaticFiles/menu.mustache",
             "destinationPath": "./Publish/Views/menu.mustache"
         },
         {
-            "originalPath": "./Models/StaticFiles/cssMus.mustache",
-            "destinationPath": "./Publish/Views/cssMus.mustache"
+            "originalPath": "./Server/StaticFiles/css.mustache",
+            "destinationPath": "./Publish/Views/css.mustache"
         }
     ]
 }

@@ -13,7 +13,7 @@ module.exports = {
         },
         "awards": {
             "description": "Awards that the actor have",
-            "type": "string"
+            "type": "number"
         },
         "gender": {
             "description": "The gender of the actor",
@@ -29,6 +29,10 @@ module.exports = {
         },
         "curiosities": {
             "description": "Curiosities about the actor",
+            "type": "string"
+        },
+        "image": {
+            "description": "Image that the actor have",
             "type": "string"
         }
     },

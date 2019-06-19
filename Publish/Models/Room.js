@@ -1,9 +1,9 @@
 var database = require('../Database/sqlite.js')('./Publish/Database/projeto_dbm.db');
 
 class Room {
-    constructor (numero) {
+    constructor (number) {
         this.id = undefined;
-        this.numero = numero;
+        this.number = number;
         
     }    
 }
@@ -13,7 +13,7 @@ class Room {
 */
 Room.mappingDBtoObject = {
   room_id: 'id',
-  numero: 'numero',
+  number: 'number',
 };
 
 
@@ -40,12 +40,12 @@ Room.get = function (id, callback) {
 Room.prototype.save = function (callback) {
     if(this.id) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
-        database.run('UPDATE Room SET numero = ? WHERE room_id = ?',[this.numero,this.id],function(rows){
+        database.run('UPDATE Room SET number = ? WHERE room_id = ?',[this.number,this.id],function(rows){
             callback(rows);
         });
     } else { //caso contrÃ¡rio para insert
         //fazer a chamada a  funcao run do database para inserir o registo
-        database.run('INSERT INTO Room (numero) VALUES (?)',[this.numero],function(rows){
+        database.run('INSERT INTO Room (number) VALUES (?)',[this.number],function(rows){
             callback(rows);
         });
     }
@@ -60,5 +60,6 @@ Room.delete = function (id, callback) {
         callback(rows);
     });
 } 
+
 
 module.exports = Room;

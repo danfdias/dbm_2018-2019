@@ -63,4 +63,5 @@ Place.delete = function (id, callback) {
     });
 } 
 
+
 module.exports = Place;

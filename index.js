@@ -1,18 +1,10 @@
 var express = require("express");
 var app = express();
-var bodyParser = require('body-parser');
-var path = require('path');
-var fs = require("fs");
 var servidor = require("./Server/Server.js");
-var mustache = require("mustache");
-var mustacheExpress = require('mustache-express');
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.engine('mustache', mustacheExpress());
-app.set('view engine', 'mustache'); //extensão dos ficheiros das views
-app.set('views', __dirname + '/Views'); //indicação de qual a pasta que irá conter
 
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/public/" + "index.html");

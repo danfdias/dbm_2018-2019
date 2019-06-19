@@ -68,4 +68,21 @@ class {{classTitle}} {
     });
 } 
 
+{{#hasOrdered}}
+/**
+ * Função que executa uma query que devolve todas as entradas da tabela {{classTitle}} ordenados por um determinado valor, 
+ * com um determinado limite e ordenados de uma determinada maneira, estas 3 informações são recebidas no metodo
+ *
+ * @param {*} property Nome da propriedade com que as entradas vao ser ordenadas
+ * @param {*} order Tipo de ordenação da informação devolvida (Decrescente ou Ascedente)
+ * @param {*} limit Numero máximo de entradas a serem devolvidas pela query
+ * @callback função callback que vai ser chamada para processar a informação recebida da base de dados
+ */
+{{classTitle}}.top = function (property, order, limit, callback){
+    database.where(`SELECT * FROM {{classTitle}} ORDER BY ${property} ${order} LIMIT ${limit}`, [], {{classTitle}}, function(rows){
+        callback(rows);
+    });
+}
+{{/hasOrdered}}
+
 module.exports = {{classTitle}};
