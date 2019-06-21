@@ -3,8 +3,8 @@ module.exports = {
     "description": "Movie to be watched",
     "type": "object",
     "properties": {
-        "title": {
-            "description": "Title of the movie",
+        "name": {
+            "description": "Name of the movie",
             "type": "string"
         },
         "synopsis": {
@@ -41,7 +41,7 @@ module.exports = {
         }
     },
     "required": [
-        "title",
+        "name",
         "synopsis",
         "imdb_pontuation",
         "language",
