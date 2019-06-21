@@ -18,5 +18,15 @@
                 </a>
             </li>
         {{/controllers}}
+        {{#insert}}
+        <li>
+            <a id="anchor_insert" onclick="javascript:window.location.replace('./{{title}}/Inserir')">
+                <div id="divBox">
+                    <i class="fas fa-plus"></i>
+                </div>
+                Inserir
+            </a>
+        </li>
+        {{/insert}}
     </ul>
 </nav>

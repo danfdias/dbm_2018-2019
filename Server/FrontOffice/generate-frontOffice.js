@@ -13,7 +13,6 @@ module.exports.generateFrontOffice = function(config) {
     var controllers = [];
     var controllersFrontOffice = [];
     config.schemas.forEach(function(element, index, array) {
-        console.log(element.icon);
         controller = {
             controllerTitle: element.name,
             controllerTitleLower: element.name.toLowerCase(),

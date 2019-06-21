@@ -17,8 +17,7 @@ var actorSchema = require('../Models/Actor-schema.js');
  * all da classe Actor
  *
  */
-backofficeRouter.get('/Actor',function(req,res) {
-    
+backofficeRouter.get('/Actor',function(req,res) {    
     actor.all(function (rows) {
         res.render('list', {
             title: 'Actor',
@@ -42,7 +41,7 @@ backofficeRouter.get('/Actor',function(req,res) {
                         image: {
                             src: '../Images/read.png'
                         },
-                        tooltip: 'Detalhe'
+                        tooltip: 'Ver Detalhes'
                     }, {
                         label: '',
                         link: './Actor/Editar/' + obj.id,
@@ -68,9 +67,10 @@ backofficeRouter.get('/Actor',function(req,res) {
             }),
             columns: Object.keys(new actor()).map(key => {
                 return {
-                    name: key
+                    name: capitalizeFirstLetter(key)
                 };
-            })
+            }),
+            insert: true
         });
     });
 });
@@ -82,39 +82,32 @@ backofficeRouter.get('/Actor',function(req,res) {
  */
 backofficeRouter.get('/Actor/Detalhe/:id', function (req, res) {
     actor.get(req.params.id, function (row) {
-    res.render('details', {
-        properties: function () {
-        var allProps = Object.getOwnPropertyNames(row);
-        var validProps = [];
-        allProps.forEach(function (prop) {
-            if (actorSchema.properties.hasOwnProperty(prop)) {
-                validProps.push({
-                name: prop,
-                value: row[prop]
+        res.render('details', {
+            properties: function () {
+                var element = row[0];
+                var allProps = Object.getOwnPropertyNames(element);
+                var validProps = [];
+                allProps.forEach(function (prop) {
+                    if (actorSchema.properties.hasOwnProperty(prop)) {
+                        if(prop.toString() != "image"){
+                            validProps.push({
+                                name: capitalizeFirstLetter(prop),
+                                value: element[prop]
+                            });
+                        }
+                    }
                 });
-            }
+                return validProps;
+            },
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            imagePath: "../../../" + row[0].image,
+            title: "Actor"
         });
-        return validProps;
-    },
-    cssPath: "http://localhost:8082/style.css",
-    references: function () {
-    var allRefs = [];
-    if (actorSchema.references) {
-        actorSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: "Actor",
-            values: ref.relation == "M-M" ? req.params.id + '/' + ref.model :
-            row[(ref.model + "_id").toLowerCase()]
-        });
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-    })
     });
 });
 
@@ -131,7 +124,7 @@ backofficeRouter.get('/Actor/Inserir',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
+                            name: capitalizeFirstLetter(key),
                             required : actorSchema.required.includes(key),
                             type: typeAux,
                             min : actorSchema.properties[key].minimum,
@@ -150,28 +143,14 @@ backofficeRouter.get('/Actor/Inserir',function(req,res) {
 
     res.render('form1', {
             title: 'Actor',
-            cssPath: "http://localhost:8082/style.css",
-            properties: propsaux,
-            references: function () {
-    var allRefs = [];
-    if (actorSchema.references) {
-        var i = 1;
-        actorSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-            }
-        )
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            properties: propsaux            
+    });
 });
 
 /**
@@ -181,7 +160,7 @@ backofficeRouter.get('/Actor/Inserir',function(req,res) {
  */
 backofficeRouter.get('/Actor/Editar/:id',function(req,res) {
     actor.get(req.params.id,function (row) {
-        console.log(row);
+        var element = row[0];
     var props =  Object.getOwnPropertyNames(new actor()).map(key => {
                         if(Object.keys(actorSchema.properties).includes(key)){
                         var typeAux = actorSchema.properties[key].type;
@@ -189,12 +168,10 @@ backofficeRouter.get('/Actor/Editar/:id',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
-                            val : row[key],
+                            name: capitalizeFirstLetter(key),
+                            val : element[key],
                             required : actorSchema.required.includes(key),
-                            type: typeAux,
-                            min : actorSchema.properties[key].minimum,
-                            max : actorSchema.properties[key].maximum
+                            type: typeAux
                         }        
 
                         return obj;
@@ -209,36 +186,14 @@ backofficeRouter.get('/Actor/Editar/:id',function(req,res) {
 
     res.render('form2', {
             title: 'Actor',
-            cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
             idClass: req.params.id,
-            properties: propsaux,
-            references: function () {
-                var allRefs = [];
-                if (actorSchema.references) {
-                    var i = 1;
-                    actorSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    },
-    selected : function(){
-        var arr = [];
-        actorSchema.references.forEach(function (ref) { 
-            var aux =ref.model + "_id"; 
-            arr.push({idAux : row[aux]});
-            }
-            );
-        return arr;
-    }
+            properties: propsaux
             }
         )
     });
@@ -256,8 +211,7 @@ var directorSchema = require('../Models/Director-schema.js');
  * all da classe Director
  *
  */
-backofficeRouter.get('/Director',function(req,res) {
-    
+backofficeRouter.get('/Director',function(req,res) {    
     director.all(function (rows) {
         res.render('list', {
             title: 'Director',
@@ -281,7 +235,7 @@ backofficeRouter.get('/Director',function(req,res) {
                         image: {
                             src: '../Images/read.png'
                         },
-                        tooltip: 'Detalhe'
+                        tooltip: 'Ver Detalhes'
                     }, {
                         label: '',
                         link: './Director/Editar/' + obj.id,
@@ -307,9 +261,10 @@ backofficeRouter.get('/Director',function(req,res) {
             }),
             columns: Object.keys(new director()).map(key => {
                 return {
-                    name: key
+                    name: capitalizeFirstLetter(key)
                 };
-            })
+            }),
+            insert: true
         });
     });
 });
@@ -321,39 +276,32 @@ backofficeRouter.get('/Director',function(req,res) {
  */
 backofficeRouter.get('/Director/Detalhe/:id', function (req, res) {
     director.get(req.params.id, function (row) {
-    res.render('details', {
-        properties: function () {
-        var allProps = Object.getOwnPropertyNames(row);
-        var validProps = [];
-        allProps.forEach(function (prop) {
-            if (directorSchema.properties.hasOwnProperty(prop)) {
-                validProps.push({
-                name: prop,
-                value: row[prop]
+        res.render('details', {
+            properties: function () {
+                var element = row[0];
+                var allProps = Object.getOwnPropertyNames(element);
+                var validProps = [];
+                allProps.forEach(function (prop) {
+                    if (directorSchema.properties.hasOwnProperty(prop)) {
+                        if(prop.toString() != "image"){
+                            validProps.push({
+                                name: capitalizeFirstLetter(prop),
+                                value: element[prop]
+                            });
+                        }
+                    }
                 });
-            }
+                return validProps;
+            },
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            imagePath: "../../../" + row[0].image,
+            title: "Director"
         });
-        return validProps;
-    },
-    cssPath: "http://localhost:8082/style.css",
-    references: function () {
-    var allRefs = [];
-    if (directorSchema.references) {
-        directorSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: "Director",
-            values: ref.relation == "M-M" ? req.params.id + '/' + ref.model :
-            row[(ref.model + "_id").toLowerCase()]
-        });
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-    })
     });
 });
 
@@ -370,7 +318,7 @@ backofficeRouter.get('/Director/Inserir',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
+                            name: capitalizeFirstLetter(key),
                             required : directorSchema.required.includes(key),
                             type: typeAux,
                             min : directorSchema.properties[key].minimum,
@@ -389,28 +337,14 @@ backofficeRouter.get('/Director/Inserir',function(req,res) {
 
     res.render('form1', {
             title: 'Director',
-            cssPath: "http://localhost:8082/style.css",
-            properties: propsaux,
-            references: function () {
-    var allRefs = [];
-    if (directorSchema.references) {
-        var i = 1;
-        directorSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-            }
-        )
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            properties: propsaux            
+    });
 });
 
 /**
@@ -420,7 +354,7 @@ backofficeRouter.get('/Director/Inserir',function(req,res) {
  */
 backofficeRouter.get('/Director/Editar/:id',function(req,res) {
     director.get(req.params.id,function (row) {
-        console.log(row);
+        var element = row[0];
     var props =  Object.getOwnPropertyNames(new director()).map(key => {
                         if(Object.keys(directorSchema.properties).includes(key)){
                         var typeAux = directorSchema.properties[key].type;
@@ -428,12 +362,10 @@ backofficeRouter.get('/Director/Editar/:id',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
-                            val : row[key],
+                            name: capitalizeFirstLetter(key),
+                            val : element[key],
                             required : directorSchema.required.includes(key),
-                            type: typeAux,
-                            min : directorSchema.properties[key].minimum,
-                            max : directorSchema.properties[key].maximum
+                            type: typeAux
                         }        
 
                         return obj;
@@ -448,36 +380,14 @@ backofficeRouter.get('/Director/Editar/:id',function(req,res) {
 
     res.render('form2', {
             title: 'Director',
-            cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
             idClass: req.params.id,
-            properties: propsaux,
-            references: function () {
-                var allRefs = [];
-                if (directorSchema.references) {
-                    var i = 1;
-                    directorSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    },
-    selected : function(){
-        var arr = [];
-        directorSchema.references.forEach(function (ref) { 
-            var aux =ref.model + "_id"; 
-            arr.push({idAux : row[aux]});
-            }
-            );
-        return arr;
-    }
+            properties: propsaux
             }
         )
     });
@@ -495,8 +405,7 @@ var categorySchema = require('../Models/Category-schema.js');
  * all da classe Category
  *
  */
-backofficeRouter.get('/Category',function(req,res) {
-    
+backofficeRouter.get('/Category',function(req,res) {    
     category.all(function (rows) {
         res.render('list', {
             title: 'Category',
@@ -520,7 +429,7 @@ backofficeRouter.get('/Category',function(req,res) {
                         image: {
                             src: '../Images/read.png'
                         },
-                        tooltip: 'Detalhe'
+                        tooltip: 'Ver Detalhes'
                     }, {
                         label: '',
                         link: './Category/Editar/' + obj.id,
@@ -546,9 +455,10 @@ backofficeRouter.get('/Category',function(req,res) {
             }),
             columns: Object.keys(new category()).map(key => {
                 return {
-                    name: key
+                    name: capitalizeFirstLetter(key)
                 };
-            })
+            }),
+            insert: true
         });
     });
 });
@@ -560,39 +470,32 @@ backofficeRouter.get('/Category',function(req,res) {
  */
 backofficeRouter.get('/Category/Detalhe/:id', function (req, res) {
     category.get(req.params.id, function (row) {
-    res.render('details', {
-        properties: function () {
-        var allProps = Object.getOwnPropertyNames(row);
-        var validProps = [];
-        allProps.forEach(function (prop) {
-            if (categorySchema.properties.hasOwnProperty(prop)) {
-                validProps.push({
-                name: prop,
-                value: row[prop]
+        res.render('details', {
+            properties: function () {
+                var element = row[0];
+                var allProps = Object.getOwnPropertyNames(element);
+                var validProps = [];
+                allProps.forEach(function (prop) {
+                    if (categorySchema.properties.hasOwnProperty(prop)) {
+                        if(prop.toString() != "image"){
+                            validProps.push({
+                                name: capitalizeFirstLetter(prop),
+                                value: element[prop]
+                            });
+                        }
+                    }
                 });
-            }
+                return validProps;
+            },
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            imagePath: "../../../" + row[0].image,
+            title: "Category"
         });
-        return validProps;
-    },
-    cssPath: "http://localhost:8082/style.css",
-    references: function () {
-    var allRefs = [];
-    if (categorySchema.references) {
-        categorySchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: "Category",
-            values: ref.relation == "M-M" ? req.params.id + '/' + ref.model :
-            row[(ref.model + "_id").toLowerCase()]
-        });
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-    })
     });
 });
 
@@ -609,7 +512,7 @@ backofficeRouter.get('/Category/Inserir',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
+                            name: capitalizeFirstLetter(key),
                             required : categorySchema.required.includes(key),
                             type: typeAux,
                             min : categorySchema.properties[key].minimum,
@@ -628,28 +531,14 @@ backofficeRouter.get('/Category/Inserir',function(req,res) {
 
     res.render('form1', {
             title: 'Category',
-            cssPath: "http://localhost:8082/style.css",
-            properties: propsaux,
-            references: function () {
-    var allRefs = [];
-    if (categorySchema.references) {
-        var i = 1;
-        categorySchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-            }
-        )
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            properties: propsaux            
+    });
 });
 
 /**
@@ -659,7 +548,7 @@ backofficeRouter.get('/Category/Inserir',function(req,res) {
  */
 backofficeRouter.get('/Category/Editar/:id',function(req,res) {
     category.get(req.params.id,function (row) {
-        console.log(row);
+        var element = row[0];
     var props =  Object.getOwnPropertyNames(new category()).map(key => {
                         if(Object.keys(categorySchema.properties).includes(key)){
                         var typeAux = categorySchema.properties[key].type;
@@ -667,12 +556,10 @@ backofficeRouter.get('/Category/Editar/:id',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
-                            val : row[key],
+                            name: capitalizeFirstLetter(key),
+                            val : element[key],
                             required : categorySchema.required.includes(key),
-                            type: typeAux,
-                            min : categorySchema.properties[key].minimum,
-                            max : categorySchema.properties[key].maximum
+                            type: typeAux
                         }        
 
                         return obj;
@@ -687,36 +574,14 @@ backofficeRouter.get('/Category/Editar/:id',function(req,res) {
 
     res.render('form2', {
             title: 'Category',
-            cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
             idClass: req.params.id,
-            properties: propsaux,
-            references: function () {
-                var allRefs = [];
-                if (categorySchema.references) {
-                    var i = 1;
-                    categorySchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    },
-    selected : function(){
-        var arr = [];
-        categorySchema.references.forEach(function (ref) { 
-            var aux =ref.model + "_id"; 
-            arr.push({idAux : row[aux]});
-            }
-            );
-        return arr;
-    }
+            properties: propsaux
             }
         )
     });
@@ -734,8 +599,7 @@ var movieSchema = require('../Models/Movie-schema.js');
  * all da classe Movie
  *
  */
-backofficeRouter.get('/Movie',function(req,res) {
-    
+backofficeRouter.get('/Movie',function(req,res) {    
     movie.all(function (rows) {
         res.render('list', {
             title: 'Movie',
@@ -759,7 +623,7 @@ backofficeRouter.get('/Movie',function(req,res) {
                         image: {
                             src: '../Images/read.png'
                         },
-                        tooltip: 'Detalhe'
+                        tooltip: 'Ver Detalhes'
                     }, {
                         label: '',
                         link: './Movie/Editar/' + obj.id,
@@ -785,9 +649,10 @@ backofficeRouter.get('/Movie',function(req,res) {
             }),
             columns: Object.keys(new movie()).map(key => {
                 return {
-                    name: key
+                    name: capitalizeFirstLetter(key)
                 };
-            })
+            }),
+            insert: true
         });
     });
 });
@@ -799,39 +664,32 @@ backofficeRouter.get('/Movie',function(req,res) {
  */
 backofficeRouter.get('/Movie/Detalhe/:id', function (req, res) {
     movie.get(req.params.id, function (row) {
-    res.render('details', {
-        properties: function () {
-        var allProps = Object.getOwnPropertyNames(row);
-        var validProps = [];
-        allProps.forEach(function (prop) {
-            if (movieSchema.properties.hasOwnProperty(prop)) {
-                validProps.push({
-                name: prop,
-                value: row[prop]
+        res.render('details', {
+            properties: function () {
+                var element = row[0];
+                var allProps = Object.getOwnPropertyNames(element);
+                var validProps = [];
+                allProps.forEach(function (prop) {
+                    if (movieSchema.properties.hasOwnProperty(prop)) {
+                        if(prop.toString() != "image"){
+                            validProps.push({
+                                name: capitalizeFirstLetter(prop),
+                                value: element[prop]
+                            });
+                        }
+                    }
                 });
-            }
+                return validProps;
+            },
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            imagePath: "../../../" + row[0].image,
+            title: "Movie"
         });
-        return validProps;
-    },
-    cssPath: "http://localhost:8082/style.css",
-    references: function () {
-    var allRefs = [];
-    if (movieSchema.references) {
-        movieSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: "Movie",
-            values: ref.relation == "M-M" ? req.params.id + '/' + ref.model :
-            row[(ref.model + "_id").toLowerCase()]
-        });
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-    })
     });
 });
 
@@ -848,7 +706,7 @@ backofficeRouter.get('/Movie/Inserir',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
+                            name: capitalizeFirstLetter(key),
                             required : movieSchema.required.includes(key),
                             type: typeAux,
                             min : movieSchema.properties[key].minimum,
@@ -867,28 +725,14 @@ backofficeRouter.get('/Movie/Inserir',function(req,res) {
 
     res.render('form1', {
             title: 'Movie',
-            cssPath: "http://localhost:8082/style.css",
-            properties: propsaux,
-            references: function () {
-    var allRefs = [];
-    if (movieSchema.references) {
-        var i = 1;
-        movieSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-            }
-        )
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            properties: propsaux            
+    });
 });
 
 /**
@@ -898,7 +742,7 @@ backofficeRouter.get('/Movie/Inserir',function(req,res) {
  */
 backofficeRouter.get('/Movie/Editar/:id',function(req,res) {
     movie.get(req.params.id,function (row) {
-        console.log(row);
+        var element = row[0];
     var props =  Object.getOwnPropertyNames(new movie()).map(key => {
                         if(Object.keys(movieSchema.properties).includes(key)){
                         var typeAux = movieSchema.properties[key].type;
@@ -906,12 +750,10 @@ backofficeRouter.get('/Movie/Editar/:id',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
-                            val : row[key],
+                            name: capitalizeFirstLetter(key),
+                            val : element[key],
                             required : movieSchema.required.includes(key),
-                            type: typeAux,
-                            min : movieSchema.properties[key].minimum,
-                            max : movieSchema.properties[key].maximum
+                            type: typeAux
                         }        
 
                         return obj;
@@ -926,36 +768,14 @@ backofficeRouter.get('/Movie/Editar/:id',function(req,res) {
 
     res.render('form2', {
             title: 'Movie',
-            cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
             idClass: req.params.id,
-            properties: propsaux,
-            references: function () {
-                var allRefs = [];
-                if (movieSchema.references) {
-                    var i = 1;
-                    movieSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    },
-    selected : function(){
-        var arr = [];
-        movieSchema.references.forEach(function (ref) { 
-            var aux =ref.model + "_id"; 
-            arr.push({idAux : row[aux]});
-            }
-            );
-        return arr;
-    }
+            properties: propsaux
             }
         )
     });
@@ -973,8 +793,7 @@ var placeSchema = require('../Models/Place-schema.js');
  * all da classe Place
  *
  */
-backofficeRouter.get('/Place',function(req,res) {
-    
+backofficeRouter.get('/Place',function(req,res) {    
     place.all(function (rows) {
         res.render('list', {
             title: 'Place',
@@ -998,7 +817,7 @@ backofficeRouter.get('/Place',function(req,res) {
                         image: {
                             src: '../Images/read.png'
                         },
-                        tooltip: 'Detalhe'
+                        tooltip: 'Ver Detalhes'
                     }, {
                         label: '',
                         link: './Place/Editar/' + obj.id,
@@ -1024,9 +843,10 @@ backofficeRouter.get('/Place',function(req,res) {
             }),
             columns: Object.keys(new place()).map(key => {
                 return {
-                    name: key
+                    name: capitalizeFirstLetter(key)
                 };
-            })
+            }),
+            insert: true
         });
     });
 });
@@ -1038,39 +858,32 @@ backofficeRouter.get('/Place',function(req,res) {
  */
 backofficeRouter.get('/Place/Detalhe/:id', function (req, res) {
     place.get(req.params.id, function (row) {
-    res.render('details', {
-        properties: function () {
-        var allProps = Object.getOwnPropertyNames(row);
-        var validProps = [];
-        allProps.forEach(function (prop) {
-            if (placeSchema.properties.hasOwnProperty(prop)) {
-                validProps.push({
-                name: prop,
-                value: row[prop]
+        res.render('details', {
+            properties: function () {
+                var element = row[0];
+                var allProps = Object.getOwnPropertyNames(element);
+                var validProps = [];
+                allProps.forEach(function (prop) {
+                    if (placeSchema.properties.hasOwnProperty(prop)) {
+                        if(prop.toString() != "image"){
+                            validProps.push({
+                                name: capitalizeFirstLetter(prop),
+                                value: element[prop]
+                            });
+                        }
+                    }
                 });
-            }
+                return validProps;
+            },
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            imagePath: "../../../" + row[0].image,
+            title: "Place"
         });
-        return validProps;
-    },
-    cssPath: "http://localhost:8082/style.css",
-    references: function () {
-    var allRefs = [];
-    if (placeSchema.references) {
-        placeSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: "Place",
-            values: ref.relation == "M-M" ? req.params.id + '/' + ref.model :
-            row[(ref.model + "_id").toLowerCase()]
-        });
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-    })
     });
 });
 
@@ -1087,7 +900,7 @@ backofficeRouter.get('/Place/Inserir',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
+                            name: capitalizeFirstLetter(key),
                             required : placeSchema.required.includes(key),
                             type: typeAux,
                             min : placeSchema.properties[key].minimum,
@@ -1106,28 +919,14 @@ backofficeRouter.get('/Place/Inserir',function(req,res) {
 
     res.render('form1', {
             title: 'Place',
-            cssPath: "http://localhost:8082/style.css",
-            properties: propsaux,
-            references: function () {
-    var allRefs = [];
-    if (placeSchema.references) {
-        var i = 1;
-        placeSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-            }
-        )
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            properties: propsaux            
+    });
 });
 
 /**
@@ -1137,7 +936,7 @@ backofficeRouter.get('/Place/Inserir',function(req,res) {
  */
 backofficeRouter.get('/Place/Editar/:id',function(req,res) {
     place.get(req.params.id,function (row) {
-        console.log(row);
+        var element = row[0];
     var props =  Object.getOwnPropertyNames(new place()).map(key => {
                         if(Object.keys(placeSchema.properties).includes(key)){
                         var typeAux = placeSchema.properties[key].type;
@@ -1145,12 +944,10 @@ backofficeRouter.get('/Place/Editar/:id',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
-                            val : row[key],
+                            name: capitalizeFirstLetter(key),
+                            val : element[key],
                             required : placeSchema.required.includes(key),
-                            type: typeAux,
-                            min : placeSchema.properties[key].minimum,
-                            max : placeSchema.properties[key].maximum
+                            type: typeAux
                         }        
 
                         return obj;
@@ -1165,36 +962,14 @@ backofficeRouter.get('/Place/Editar/:id',function(req,res) {
 
     res.render('form2', {
             title: 'Place',
-            cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
             idClass: req.params.id,
-            properties: propsaux,
-            references: function () {
-                var allRefs = [];
-                if (placeSchema.references) {
-                    var i = 1;
-                    placeSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    },
-    selected : function(){
-        var arr = [];
-        placeSchema.references.forEach(function (ref) { 
-            var aux =ref.model + "_id"; 
-            arr.push({idAux : row[aux]});
-            }
-            );
-        return arr;
-    }
+            properties: propsaux
             }
         )
     });
@@ -1212,8 +987,7 @@ var roomSchema = require('../Models/Room-schema.js');
  * all da classe Room
  *
  */
-backofficeRouter.get('/Room',function(req,res) {
-    
+backofficeRouter.get('/Room',function(req,res) {    
     room.all(function (rows) {
         res.render('list', {
             title: 'Room',
@@ -1237,7 +1011,7 @@ backofficeRouter.get('/Room',function(req,res) {
                         image: {
                             src: '../Images/read.png'
                         },
-                        tooltip: 'Detalhe'
+                        tooltip: 'Ver Detalhes'
                     }, {
                         label: '',
                         link: './Room/Editar/' + obj.id,
@@ -1263,9 +1037,10 @@ backofficeRouter.get('/Room',function(req,res) {
             }),
             columns: Object.keys(new room()).map(key => {
                 return {
-                    name: key
+                    name: capitalizeFirstLetter(key)
                 };
-            })
+            }),
+            insert: true
         });
     });
 });
@@ -1277,39 +1052,32 @@ backofficeRouter.get('/Room',function(req,res) {
  */
 backofficeRouter.get('/Room/Detalhe/:id', function (req, res) {
     room.get(req.params.id, function (row) {
-    res.render('details', {
-        properties: function () {
-        var allProps = Object.getOwnPropertyNames(row);
-        var validProps = [];
-        allProps.forEach(function (prop) {
-            if (roomSchema.properties.hasOwnProperty(prop)) {
-                validProps.push({
-                name: prop,
-                value: row[prop]
+        res.render('details', {
+            properties: function () {
+                var element = row[0];
+                var allProps = Object.getOwnPropertyNames(element);
+                var validProps = [];
+                allProps.forEach(function (prop) {
+                    if (roomSchema.properties.hasOwnProperty(prop)) {
+                        if(prop.toString() != "image"){
+                            validProps.push({
+                                name: capitalizeFirstLetter(prop),
+                                value: element[prop]
+                            });
+                        }
+                    }
                 });
-            }
+                return validProps;
+            },
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            imagePath: "../../../" + row[0].image,
+            title: "Room"
         });
-        return validProps;
-    },
-    cssPath: "http://localhost:8082/style.css",
-    references: function () {
-    var allRefs = [];
-    if (roomSchema.references) {
-        roomSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: "Room",
-            values: ref.relation == "M-M" ? req.params.id + '/' + ref.model :
-            row[(ref.model + "_id").toLowerCase()]
-        });
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-    })
     });
 });
 
@@ -1326,7 +1094,7 @@ backofficeRouter.get('/Room/Inserir',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
+                            name: capitalizeFirstLetter(key),
                             required : roomSchema.required.includes(key),
                             type: typeAux,
                             min : roomSchema.properties[key].minimum,
@@ -1345,28 +1113,14 @@ backofficeRouter.get('/Room/Inserir',function(req,res) {
 
     res.render('form1', {
             title: 'Room',
-            cssPath: "http://localhost:8082/style.css",
-            properties: propsaux,
-            references: function () {
-    var allRefs = [];
-    if (roomSchema.references) {
-        var i = 1;
-        roomSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-            }
-        )
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            properties: propsaux            
+    });
 });
 
 /**
@@ -1376,7 +1130,7 @@ backofficeRouter.get('/Room/Inserir',function(req,res) {
  */
 backofficeRouter.get('/Room/Editar/:id',function(req,res) {
     room.get(req.params.id,function (row) {
-        console.log(row);
+        var element = row[0];
     var props =  Object.getOwnPropertyNames(new room()).map(key => {
                         if(Object.keys(roomSchema.properties).includes(key)){
                         var typeAux = roomSchema.properties[key].type;
@@ -1384,12 +1138,10 @@ backofficeRouter.get('/Room/Editar/:id',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
-                            val : row[key],
+                            name: capitalizeFirstLetter(key),
+                            val : element[key],
                             required : roomSchema.required.includes(key),
-                            type: typeAux,
-                            min : roomSchema.properties[key].minimum,
-                            max : roomSchema.properties[key].maximum
+                            type: typeAux
                         }        
 
                         return obj;
@@ -1404,36 +1156,14 @@ backofficeRouter.get('/Room/Editar/:id',function(req,res) {
 
     res.render('form2', {
             title: 'Room',
-            cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
             idClass: req.params.id,
-            properties: propsaux,
-            references: function () {
-                var allRefs = [];
-                if (roomSchema.references) {
-                    var i = 1;
-                    roomSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    },
-    selected : function(){
-        var arr = [];
-        roomSchema.references.forEach(function (ref) { 
-            var aux =ref.model + "_id"; 
-            arr.push({idAux : row[aux]});
-            }
-            );
-        return arr;
-    }
+            properties: propsaux
             }
         )
     });
@@ -1451,8 +1181,7 @@ var ticketSchema = require('../Models/Ticket-schema.js');
  * all da classe Ticket
  *
  */
-backofficeRouter.get('/Ticket',function(req,res) {
-    
+backofficeRouter.get('/Ticket',function(req,res) {    
     ticket.all(function (rows) {
         res.render('list', {
             title: 'Ticket',
@@ -1476,7 +1205,7 @@ backofficeRouter.get('/Ticket',function(req,res) {
                         image: {
                             src: '../Images/read.png'
                         },
-                        tooltip: 'Detalhe'
+                        tooltip: 'Ver Detalhes'
                     }, {
                         label: '',
                         link: './Ticket/Editar/' + obj.id,
@@ -1502,9 +1231,10 @@ backofficeRouter.get('/Ticket',function(req,res) {
             }),
             columns: Object.keys(new ticket()).map(key => {
                 return {
-                    name: key
+                    name: capitalizeFirstLetter(key)
                 };
-            })
+            }),
+            insert: true
         });
     });
 });
@@ -1516,39 +1246,32 @@ backofficeRouter.get('/Ticket',function(req,res) {
  */
 backofficeRouter.get('/Ticket/Detalhe/:id', function (req, res) {
     ticket.get(req.params.id, function (row) {
-    res.render('details', {
-        properties: function () {
-        var allProps = Object.getOwnPropertyNames(row);
-        var validProps = [];
-        allProps.forEach(function (prop) {
-            if (ticketSchema.properties.hasOwnProperty(prop)) {
-                validProps.push({
-                name: prop,
-                value: row[prop]
+        res.render('details', {
+            properties: function () {
+                var element = row[0];
+                var allProps = Object.getOwnPropertyNames(element);
+                var validProps = [];
+                allProps.forEach(function (prop) {
+                    if (ticketSchema.properties.hasOwnProperty(prop)) {
+                        if(prop.toString() != "image"){
+                            validProps.push({
+                                name: capitalizeFirstLetter(prop),
+                                value: element[prop]
+                            });
+                        }
+                    }
                 });
-            }
+                return validProps;
+            },
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            imagePath: "../../../" + row[0].image,
+            title: "Ticket"
         });
-        return validProps;
-    },
-    cssPath: "http://localhost:8082/style.css",
-    references: function () {
-    var allRefs = [];
-    if (ticketSchema.references) {
-        ticketSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: "Ticket",
-            values: ref.relation == "M-M" ? req.params.id + '/' + ref.model :
-            row[(ref.model + "_id").toLowerCase()]
-        });
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-    })
     });
 });
 
@@ -1565,7 +1288,7 @@ backofficeRouter.get('/Ticket/Inserir',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
+                            name: capitalizeFirstLetter(key),
                             required : ticketSchema.required.includes(key),
                             type: typeAux,
                             min : ticketSchema.properties[key].minimum,
@@ -1584,28 +1307,14 @@ backofficeRouter.get('/Ticket/Inserir',function(req,res) {
 
     res.render('form1', {
             title: 'Ticket',
-            cssPath: "http://localhost:8082/style.css",
-            properties: propsaux,
-            references: function () {
-    var allRefs = [];
-    if (ticketSchema.references) {
-        var i = 1;
-        ticketSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    }
-            }
-        )
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
+            properties: propsaux            
+    });
 });
 
 /**
@@ -1615,7 +1324,7 @@ backofficeRouter.get('/Ticket/Inserir',function(req,res) {
  */
 backofficeRouter.get('/Ticket/Editar/:id',function(req,res) {
     ticket.get(req.params.id,function (row) {
-        console.log(row);
+        var element = row[0];
     var props =  Object.getOwnPropertyNames(new ticket()).map(key => {
                         if(Object.keys(ticketSchema.properties).includes(key)){
                         var typeAux = ticketSchema.properties[key].type;
@@ -1623,12 +1332,10 @@ backofficeRouter.get('/Ticket/Editar/:id',function(req,res) {
                             typeAux = 'number';
                         }else if(typeAux === 'string')typeAux = 'text';
                         var obj = {
-                            name: key,
-                            val : row[key],
+                            name: capitalizeFirstLetter(key),
+                            val : element[key],
                             required : ticketSchema.required.includes(key),
-                            type: typeAux,
-                            min : ticketSchema.properties[key].minimum,
-                            max : ticketSchema.properties[key].maximum
+                            type: typeAux
                         }        
 
                         return obj;
@@ -1643,39 +1350,22 @@ backofficeRouter.get('/Ticket/Editar/:id',function(req,res) {
 
     res.render('form2', {
             title: 'Ticket',
-            cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../../../css/default.css"},
+                { css: "../../../css/nav.css"},
+                { css: "../../../css/all.css"},
+                { css: "../../../css/tops.css"}
+            ],
             idClass: req.params.id,
-            properties: propsaux,
-            references: function () {
-                var allRefs = [];
-                if (ticketSchema.references) {
-                    var i = 1;
-                    ticketSchema.references.forEach(function (ref) {
-        allRefs.push({
-            label: ref.label,
-            model: ref.model,
-            values: ref.relation == "M-1" ? req.params.id + '/' + ref.model : ref.model + "_id",
-            selectId:"selection" + i
-        });i++;
-        });
-    }
-    return allRefs;
-    },
-    get hasReferences() {
-        return this.references().length > 0;
-    },
-    selected : function(){
-        var arr = [];
-        ticketSchema.references.forEach(function (ref) { 
-            var aux =ref.model + "_id"; 
-            arr.push({idAux : row[aux]});
-            }
-            );
-        return arr;
-    }
+            properties: propsaux
             }
         )
     });
 });
+
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 module.exports = backofficeRouter;

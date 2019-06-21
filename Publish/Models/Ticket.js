@@ -37,8 +37,8 @@ Ticket.get = function (id, callback) {
 /**
 * Funcao save que faz o insert/update de uma coluna a tabela Ticket
 */
-Ticket.prototype.save = function (callback) {
-    if(this.id) { //Se existir valor no id serÃ¡ para update
+Ticket.prototype.save = function (callback) {    
+    if(this.id != undefined) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
         database.run('UPDATE Ticket SET price = ? WHERE ticket_id = ?',[this.price,this.id],function(rows){
             callback(rows);
@@ -56,8 +56,8 @@ Ticket.prototype.save = function (callback) {
 */
 Ticket.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM Ticket WHERE ticket_id = ?',[id],Ticket,function(rows){
-        callback(rows);
+    database.run(`DELETE FROM Ticket WHERE ticket_id = ?`,[id],function(){
+        callback();
     });
 } 
 

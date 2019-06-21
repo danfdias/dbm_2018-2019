@@ -37,8 +37,8 @@ Category.get = function (id, callback) {
 /**
 * Funcao save que faz o insert/update de uma coluna a tabela Category
 */
-Category.prototype.save = function (callback) {
-    if(this.id) { //Se existir valor no id serÃ¡ para update
+Category.prototype.save = function (callback) {    
+    if(this.id != undefined) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
         database.run('UPDATE Category SET type = ? WHERE category_id = ?',[this.type,this.id],function(rows){
             callback(rows);
@@ -56,8 +56,8 @@ Category.prototype.save = function (callback) {
 */
 Category.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM Category WHERE category_id = ?',[id],Category,function(rows){
-        callback(rows);
+    database.run(`DELETE FROM Category WHERE category_id = ?`,[id],function(){
+        callback();
     });
 } 
 

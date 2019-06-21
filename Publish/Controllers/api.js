@@ -11,8 +11,8 @@ function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
         //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-        if (obj.hasOwnProperty(value)){
-            obj[value] = object[value];
+        if (obj.hasOwnProperty(value.toLowerCase())){
+            obj[value.toLowerCase()] = object[value];
         }
     });
     return obj;
@@ -54,13 +54,11 @@ router.get('/Actor/:id', function (req, res) {
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Actor
 */
-router.put('/Actor/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
+router.post('/Actor/:id', function (req, res) { 
     var obj = mapping(req.body, actor);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Actor");
     });
 });
 
@@ -68,10 +66,8 @@ router.put('/Actor/:id', function (req, res) { //o id tanto poderia ir no corpo 
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Actor
 */
 router.delete('/Actor/:id', function (req, res) {
-    actor.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    actor.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 
@@ -111,13 +107,11 @@ router.get('/Director/:id', function (req, res) {
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Director
 */
-router.put('/Director/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
+router.post('/Director/:id', function (req, res) { 
     var obj = mapping(req.body, director);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Director");
     });
 });
 
@@ -125,10 +119,8 @@ router.put('/Director/:id', function (req, res) { //o id tanto poderia ir no cor
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Director
 */
 router.delete('/Director/:id', function (req, res) {
-    director.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    director.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 
@@ -168,13 +160,11 @@ router.get('/Category/:id', function (req, res) {
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Category
 */
-router.put('/Category/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
+router.post('/Category/:id', function (req, res) { 
     var obj = mapping(req.body, category);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Category");
     });
 });
 
@@ -182,10 +172,8 @@ router.put('/Category/:id', function (req, res) { //o id tanto poderia ir no cor
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Category
 */
 router.delete('/Category/:id', function (req, res) {
-    category.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    category.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 
@@ -225,13 +213,11 @@ router.get('/Movie/:id', function (req, res) {
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Movie
 */
-router.put('/Movie/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
+router.post('/Movie/:id', function (req, res) { 
     var obj = mapping(req.body, movie);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Movie");
     });
 });
 
@@ -239,10 +225,8 @@ router.put('/Movie/:id', function (req, res) { //o id tanto poderia ir no corpo 
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Movie
 */
 router.delete('/Movie/:id', function (req, res) {
-    movie.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    movie.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 
@@ -282,13 +266,11 @@ router.get('/Place/:id', function (req, res) {
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Place
 */
-router.put('/Place/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
+router.post('/Place/:id', function (req, res) { 
     var obj = mapping(req.body, place);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Place");
     });
 });
 
@@ -296,10 +278,8 @@ router.put('/Place/:id', function (req, res) { //o id tanto poderia ir no corpo 
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Place
 */
 router.delete('/Place/:id', function (req, res) {
-    place.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    place.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 
@@ -339,13 +319,11 @@ router.get('/Room/:id', function (req, res) {
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Room
 */
-router.put('/Room/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
+router.post('/Room/:id', function (req, res) { 
     var obj = mapping(req.body, room);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Room");
     });
 });
 
@@ -353,10 +331,8 @@ router.put('/Room/:id', function (req, res) { //o id tanto poderia ir no corpo d
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Room
 */
 router.delete('/Room/:id', function (req, res) {
-    room.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    room.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 
@@ -396,13 +372,11 @@ router.get('/Ticket/:id', function (req, res) {
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Ticket
 */
-router.put('/Ticket/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
+router.post('/Ticket/:id', function (req, res) { 
     var obj = mapping(req.body, ticket);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Ticket");
     });
 });
 
@@ -410,10 +384,8 @@ router.put('/Ticket/:id', function (req, res) { //o id tanto poderia ir no corpo
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Ticket
 */
 router.delete('/Ticket/:id', function (req, res) {
-    ticket.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    ticket.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 
