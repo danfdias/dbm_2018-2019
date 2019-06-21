@@ -14,9 +14,9 @@ function insertDirector(name, description, gender, awards, image){
     [name, description, gender, awards, image]);    
 }
 
-function insertMovie(title, synopsis, imdb_pontuation, awards, language, budget, duration, age_restriction, image){
-    database.run('INSERT INTO Movie (title, synopsis, imdb_pontuation, awards, language, budget, duration, age_restriction, image) VALUES (?,?,?,?,?,?,?,?,?)', 
-    [title, synopsis, imdb_pontuation, awards, language, budget, duration, age_restriction, image]);    
+function insertMovie(name, synopsis, imdb_pontuation, awards, language, budget, duration, age_restriction, image){
+    database.run('INSERT INTO Movie (name, synopsis, imdb_pontuation, awards, language, budget, duration, age_restriction, image) VALUES (?,?,?,?,?,?,?,?,?)', 
+    [name, synopsis, imdb_pontuation, awards, language, budget, duration, age_restriction, image]);    
 }
 
 function insertPlace(chair_number, row, room){

@@ -69,35 +69,49 @@ frontofficeRouter.get('/',function(req,res) {
         titles: []
     };
     actor.top("awards", "DESC", "10", function (rows) {
-        renderObject.query1_first5 = get5(rows);
-        renderObject.query1_last5 = get5(rows);
+        renderObject.query1_first5 = get5(rows, 1, "awards");
+        renderObject.query1_last5 = get5(rows, renderObject.query1_first5.length + 1, "awards");
         renderObject.titles.push("TOP 10 ACTORS (AWARDS)");
         movie.top("imdb_pontuation", "DESC", "10", function (rows) {
-            renderObject.query2_first5 = get5(rows);
-            renderObject.query2_last5 = get5(rows);
+            renderObject.query2_first5 = get5(rows, 1, "imdb_pontuation");
+            renderObject.query2_last5 = get5(rows, renderObject.query2_first5.length + 1, "imdb_pontuation");
             renderObject.titles.push("TOP 10 MOVIES (IMDb)");
             director.top("awards", "DESC", "10", function (rows) {
-                renderObject.query3_first5 = get5(rows);
-                renderObject.query3_last5 = get5(rows);
+                renderObject.query3_first5 = get5(rows, 1, "awards");
+                renderObject.query3_last5 = get5(rows, renderObject.query3_first5.length + 1, "awards");
                 renderObject.titles.push("TOP 10 DIRECTORS (AWARDS)");
                 movie.top("awards", "DESC", "10", function (rows) {
-                renderObject.query4_first5 = get5(rows);
-                renderObject.query4_last5 = get5(rows);
-                renderObject.titles.push("TOP 10 MOVIES (AWARDS)");
-                res.render('frontoffice', renderObject);
+                    renderObject.query4_first5 = get5(rows, 1, "awards");
+                    renderObject.query4_last5 = get5(rows, renderObject.query4_first5.length + 1, "awards");
+                    renderObject.titles.push("TOP 10 MOVIES (AWARDS)");
+                    res.render('frontoffice', renderObject);
                 });
             });
         });
     });
 });
 
-function get5(array){
+function get5(array, index, rankType){
     var array_return = [];
+    var array_aux = [];
+    var index_aux = index;
     if(array.length > 0){        
         if(array.length >= 5){
-            array_return = array.splice(0,5);        
-        }else array_return = array.splice(0,array.length);   
+            array_aux = array.splice(0,5);        
+        }else array_aux = array.splice(0,array.length);   
     }     
+    if(array_aux.length > 0){
+        array_aux.forEach(function(element){
+            array_return.push(
+                {
+                    element: element,
+                    title: index_aux.toString().concat("º ", element.name, " (", element[rankType], ")")
+                }
+            );
+            index_aux++;
+        });
+    }
+    console.log(array_return);
     return array_return; 
 }
 

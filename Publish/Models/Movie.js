@@ -1,9 +1,9 @@
 var database = require('../Database/sqlite.js')('./Publish/Database/projeto_dbm.db');
 
 class Movie {
-    constructor (title,synopsis,imdb_pontuation,awards,language,budget,duration,age_restriction,image) {
+    constructor (name,synopsis,imdb_pontuation,awards,language,budget,duration,age_restriction,image) {
         this.id = undefined;
-        this.title = title;
+        this.name = name;
         this.synopsis = synopsis;
         this.imdb_pontuation = imdb_pontuation;
         this.awards = awards;
@@ -22,7 +22,7 @@ class Movie {
 */
 Movie.mappingDBtoObject = {
   movie_id: 'id',
-  title: 'title',
+  name: 'name',
   synopsis: 'synopsis',
   imdb_pontuation: 'imdb_pontuation',
   awards: 'awards',
@@ -57,12 +57,12 @@ Movie.get = function (id, callback) {
 Movie.prototype.save = function (callback) {    
     if(this.id != undefined) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
-        database.run('UPDATE Movie SET title = ?, synopsis = ?, imdb_pontuation = ?, awards = ?, language = ?, budget = ?, duration = ?, age_restriction = ?, image = ? WHERE movie_id = ?',[this.title,this.synopsis,this.imdb_pontuation,this.awards,this.language,this.budget,this.duration,this.age_restriction,this.image,this.id],function(rows){
+        database.run('UPDATE Movie SET name = ?, synopsis = ?, imdb_pontuation = ?, awards = ?, language = ?, budget = ?, duration = ?, age_restriction = ?, image = ? WHERE movie_id = ?',[this.name,this.synopsis,this.imdb_pontuation,this.awards,this.language,this.budget,this.duration,this.age_restriction,this.image,this.id],function(rows){
             callback(rows);
         });
     } else { //caso contrÃ¡rio para insert
         //fazer a chamada a  funcao run do database para inserir o registo
-        database.run('INSERT INTO Movie (title,synopsis,imdb_pontuation,awards,language,budget,duration,age_restriction,image) VALUES (?,?,?,?,?,?,?,?,?)',[this.title,this.synopsis,this.imdb_pontuation,this.awards,this.language,this.budget,this.duration,this.age_restriction,this.image],function(rows){
+        database.run('INSERT INTO Movie (name,synopsis,imdb_pontuation,awards,language,budget,duration,age_restriction,image) VALUES (?,?,?,?,?,?,?,?,?)',[this.name,this.synopsis,this.imdb_pontuation,this.awards,this.language,this.budget,this.duration,this.age_restriction,this.image],function(rows){
             callback(rows);
         });
     }
