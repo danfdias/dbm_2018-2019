@@ -11,8 +11,8 @@ function mapping(object, type) {
     var obj = new type();
     Object.keys(object).forEach(function (value) {
         //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-        if (obj.hasOwnProperty(value)){
-            obj[value] = object[value];
+        if (obj.hasOwnProperty(value.toLowerCase())){
+            obj[value.toLowerCase()] = object[value];
         }
     });
     return obj;
@@ -55,13 +55,11 @@ router.get('/{{controllerTitle}}/:id', function (req, res) {
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela {{controllerTitle}}
 */
-router.put('/{{controllerTitle}}/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
+router.post('/{{controllerTitle}}/:id', function (req, res) { 
     var obj = mapping(req.body, {{controllerTitleLower}});
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/{{controllerTitle}}");
     });
 });
 
@@ -69,10 +67,8 @@ router.put('/{{controllerTitle}}/:id', function (req, res) { //o id tanto poderi
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela {{controllerTitle}}
 */
 router.delete('/{{controllerTitle}}/:id', function (req, res) {
-    {{controllerTitleLower}}.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    {{controllerTitleLower}}.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 

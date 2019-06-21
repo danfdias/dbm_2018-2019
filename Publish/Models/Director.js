@@ -46,8 +46,8 @@ Director.get = function (id, callback) {
 /**
 * Funcao save que faz o insert/update de uma coluna a tabela Director
 */
-Director.prototype.save = function (callback) {
-    if(this.id) { //Se existir valor no id serÃ¡ para update
+Director.prototype.save = function (callback) {    
+    if(this.id != undefined) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
         database.run('UPDATE Director SET name = ?, description = ?, gender = ?, awards = ?, image = ? WHERE director_id = ?',[this.name,this.description,this.gender,this.awards,this.image,this.id],function(rows){
             callback(rows);
@@ -65,8 +65,8 @@ Director.prototype.save = function (callback) {
 */
 Director.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM Director WHERE director_id = ?',[id],Director,function(rows){
-        callback(rows);
+    database.run(`DELETE FROM Director WHERE director_id = ?`,[id],function(){
+        callback();
     });
 } 
 

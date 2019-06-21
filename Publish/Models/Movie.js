@@ -54,8 +54,8 @@ Movie.get = function (id, callback) {
 /**
 * Funcao save que faz o insert/update de uma coluna a tabela Movie
 */
-Movie.prototype.save = function (callback) {
-    if(this.id) { //Se existir valor no id serÃ¡ para update
+Movie.prototype.save = function (callback) {    
+    if(this.id != undefined) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
         database.run('UPDATE Movie SET title = ?, synopsis = ?, imdb_pontuation = ?, awards = ?, language = ?, budget = ?, duration = ?, age_restriction = ?, image = ? WHERE movie_id = ?',[this.title,this.synopsis,this.imdb_pontuation,this.awards,this.language,this.budget,this.duration,this.age_restriction,this.image,this.id],function(rows){
             callback(rows);
@@ -73,8 +73,8 @@ Movie.prototype.save = function (callback) {
 */
 Movie.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM Movie WHERE movie_id = ?',[id],Movie,function(rows){
-        callback(rows);
+    database.run(`DELETE FROM Movie WHERE movie_id = ?`,[id],function(){
+        callback();
     });
 } 
 

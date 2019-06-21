@@ -52,8 +52,8 @@ Actor.get = function (id, callback) {
 /**
 * Funcao save que faz o insert/update de uma coluna a tabela Actor
 */
-Actor.prototype.save = function (callback) {
-    if(this.id) { //Se existir valor no id serÃ¡ para update
+Actor.prototype.save = function (callback) {    
+    if(this.id != undefined) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
         database.run('UPDATE Actor SET name = ?, description = ?, awards = ?, gender = ?, height = ?, weight = ?, curiosities = ?, image = ? WHERE actor_id = ?',[this.name,this.description,this.awards,this.gender,this.height,this.weight,this.curiosities,this.image,this.id],function(rows){
             callback(rows);
@@ -71,8 +71,8 @@ Actor.prototype.save = function (callback) {
 */
 Actor.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM Actor WHERE actor_id = ?',[id],Actor,function(rows){
-        callback(rows);
+    database.run(`DELETE FROM Actor WHERE actor_id = ?`,[id],function(){
+        callback();
     });
 } 
 

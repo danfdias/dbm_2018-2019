@@ -1,54 +1,16 @@
 <html>
     <head>
     {{>css}}
-        <script>          
-            {{#hasReferences}}
-            function loadValues(model,values,label,controlId,relatedModel,selectId){
-                var xhr = new XMLHttpRequest();
-                //"../../api/${model}"
-                var url = "../../api/"+ model;     
-                xhr.open("GET", url, true);
-                xhr.onreadystatechange = function () {
-                    if ((this.readyState === 4) && (this.status === 200)) {
-                        var control = document.getElementById(selectId);
-                        var response = JSON.parse(xhr.responseText);
-                        response.forEach(p => {
-                            var option = document.createElement("option");
-                            option.value = parseInt(p["id"]);
-                            
-                            var txt = document.createTextNode(p[label]);
-                            option.appendChild(txt);
-                            control.appendChild(option);                        
-                        });
-                    }
-                
-                }
-                xhr.send();
-            }
-            window.onload = function() {
-                {{#references}}
-                loadValues('{{model}}','{{values}}','{{label}}','label{{model}}value','','{{selectId}}');
-                {{/references}}
-            }
-            {{/hasReferences}}
-        </script>
-
     </head>
     <body>
     {{>menu}}
         <form action="../../api/{{title}}" method="POST">
             {{#properties}}
             <div>
-                <label>{{name}}:</label>
-                <input type="{{type}}" name="{{name}}" {{#min}} min="{{min}}" {{/min}} {{#max}} max="{{max}}" {{/max}} {{#required}}required{{/required}} />
+                <label>{{name}} {{#required}}<span id="required_span">*</span>{{/required}}</label>
+                <input type="{{type}}" name="{{name}}" {{#required}}required{{/required}} />
             </div>
             {{/properties}}
-
-            {{#references}}
-            <select id="{{selectId}}" name="{{model}}_id">
-            </select>
-            {{/references}}
-
             <input type="submit" value="Inserir" />
         </form>
     </body>

@@ -6,12 +6,10 @@
     <script>        
         function apagar(id) {
             var xhr = new XMLHttpRequest();
-            xhr.open("DELETE", "../api/{{title}}/" + id, true);
+            xhr.open("DELETE", "../../api/{{title}}/" + id, true);
             xhr.onreadystatechange = function () {
-                if(xhr.readyState === 4 && xhr.status === 200) {
-                    var response = JSON.parse(this.responseText)
-                    if(response.success) 
-                        window.location.reload();
+                if(xhr.readyState === 4 && xhr.status === 200) {                    
+                    window.location.reload();
                 }
             }
             xhr.send(); 
@@ -39,7 +37,7 @@
                     <a href="{{link}}" title="{{tooltip}}" {{#events}}{{name}}="javascript:{{function}}({{args}})" {{/events}}>
                         {{label}}
                         {{#image}}
-                            <img src="{{src}}" alt="{{alt}}" />
+                            <img id="icons" src="{{src}}" alt="{{alt}}" />
                         {{/image}}
                     </a>
                 {{/link}}
@@ -48,8 +46,7 @@
             {{/actions}}
         </tr>
         {{/rows}}
-    </table>
-    <input type="button" value="Inserir" onclick="javascript:window.location.replace('./{{title}}/Inserir')" />
+    </table>    
 </body>
 
 </html>
