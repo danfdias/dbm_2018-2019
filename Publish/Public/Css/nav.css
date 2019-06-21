@@ -1,0 +1,91 @@
+@import url(https://fonts.googleapis.com/css?family=Slabo+27px);
+@import url(https://fonts.googleapis.com/css?family=Slabo+27px);
+body {
+  font-family: 'Slabo 27px', serif;
+}
+.navigation{
+    width: 100%;
+    height: 70px;
+    background: #cd5c5c;
+}
+i{
+    font-size: 20px !important;
+    text-align: center;
+    padding: 10px;
+}
+#main{
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display:inline-block;
+}
+.content {
+  padding: 40px 20px;
+}
+nav > ul {
+  list-style-type: none !important;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  text-align: left;
+}
+nav > ul > li {
+  display: inline-block;
+  height: 100%;
+  width: 70px;
+}
+nav > ul > li.hidden {
+  display: none;
+}
+nav > ul > li a {
+  font-size: 16px;
+  display: block;
+  background: #cd5c5c;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  height: 100%;
+}
+nav > ul > li a .fa {
+  font-size: 16px;
+  display: block;
+  margin-bottom: 10px;
+}
+nav > ul > li a + ul {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-right: 0;
+}
+nav > ul > li a + ul li {
+  margin-top: 1px;
+}
+nav > ul > li a + ul li a {
+  padding-left: 16px;
+  text-align: left;
+  white-space: nowrap;
+}
+nav > ul > li a + ul li a .fa {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+nav > ul > li a + ul li a:hover {
+  background: #a44949;
+}
+nav > ul > li:hover > a {
+  background: #a44949;
+}
+nav > ul > li:hover ul {
+  display: block;
+}
+.button{
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer
+ }

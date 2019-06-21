@@ -1,0 +1,25 @@
+module.exports = {
+    "title": "Place",
+    "description": "The place that users sits to watch the movie",
+    "type": "object",
+    "properties": {
+        "chair_number": {
+            "description": "The number of the chair",
+            "type": "integer"
+        },
+        "row": {
+            "description": "The row of the place",
+            "type": "string"
+        }
+    },
+    "required": [
+        "chair_number",
+        "row"
+    ],
+    "references": [
+        {
+            "model": "Room",
+            "relation": "1-M"
+        }
+    ]
+}

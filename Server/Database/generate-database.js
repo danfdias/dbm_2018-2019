@@ -12,21 +12,29 @@ var sqlite3 = require('sqlite3').verbose();
  * @param {any} schema Representa o schema recebido para ser gerada a tabela e respetivas relacoes
  * @param {any} name Representa o nome da base de dados a ser usada
  */
-module.exports.generate = function(name, schema) {
+module.exports.generate = function (name, schema) {
     var personProps = Object.keys(schema.properties);
     var db = new sqlite3.Database('./Publish/Database/' + name);
     var newTable = "";
     var view = {
         tableName: schema.title,
-        tableProperties: function() { // funcao que gera a tabela para o respetivo objeto
+        tableProperties: function () { // funcao que gera a tabela para o respetivo objeto
             var str = "\n";
             str += schema.title.toLowerCase() + "_id integer PRIMARY KEY, \n";
             personProps.forEach((p, i) => {
                 var typeAUx = schema.properties[p].type;
                 str += p;
-                if (typeAUx === "integer") str += " " + typeAUx;
-                if (typeAUx === "string") str += " " + "text NOT NULL"
-                if (typeAUx === "number") str += " FLOAT";
+                switch (typeAUx) {
+                    case 'string':
+                        str += " text NOT NULL";
+                        break;
+                    case 'number':
+                        str += " integer";
+                        break;
+                    case 'double':
+                        str += " real";
+                        break;
+                }
                 if (schema.properties[p].unique === true) str += " " + "UNIQUE";
                 if (i < (personProps.length - 1)) str += ", \n"
             });
@@ -34,12 +42,11 @@ module.exports.generate = function(name, schema) {
             if (schema.references) {
                 var ref = schema.references;
                 var fks = "";
-
                 for (var i = 0; i < ref.length; i++) {
                     var model = ref[i]["model"];
                     var rel = ref[i]["relation"];
                     if (rel === "1-M" || rel === "1-1") {
-                        str += ",\n" + model.toLowerCase() + "_id integer NOT NULL "
+                        str += ",\n" + model.toLowerCase() + "_id integer NULL "
                         fks += ",\nFOREIGN KEY (" + model.toLowerCase() + "_id) REFERENCES " + model + "(" + model.toLowerCase() + "_id)";
                     }
                     if (rel === "M-M") {
@@ -47,7 +54,7 @@ module.exports.generate = function(name, schema) {
                         newTable += schema.title.toLowerCase() + "_id integer not null,\n" + model.toLowerCase() + "_id integer not null,\n";
                         newTable += "FOREIGN KEY (" + schema.title.toLowerCase() + "_id) REFERENCES " + schema.title + "(" + schema.title.toLowerCase() + "_id),\n";
                         newTable += "FOREIGN KEY (" + model.toLowerCase() + "_id) REFERENCES " + model + "(" + model.toLowerCase() + "_id),\n";
-                        newTable += "CONSTRAINT PK PRIMARY KEY (" + schema.title.toLowerCase() + "_id," + model.toLowerCase() + "_id)\n);\n\n";
+                        newTable += "CONSTRAINT PK PRIMARY KEY (" + schema.title.toLowerCase() + "_id," + model.toLowerCase() + "_id)\n);";
                     }
                 }
                 str += fks;
@@ -56,18 +63,21 @@ module.exports.generate = function(name, schema) {
         }
     };
     var output = mustache.render(template.toString(), view);
-    //console.log(output + "\n");
 
-    db.serialize(function() {
-        if (newTable.length > 0) {
-            db.run(newTable);
-            //console.log(newTable);
-        }
+    db.serialize(function () {
         db.run(output);
+        if (newTable.length > 0) {
+            newTable.split(";").forEach(function (element) {
+                if (element.length > 0) {
+                    var tabela = element + ";";
+                    db.run(tabela);
+                }
+            });
+        }
     });
 
     //Ações a realizar à base de dados
-    db.close(function(err) {
+    db.close(function (err) {
         if (err) return console.error(err.message);
     });
 }

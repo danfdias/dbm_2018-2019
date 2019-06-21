@@ -1,5 +1,4 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
     "title": "Actor",
     "description": "Actor that participates in movies",
     "type": "object",
@@ -8,13 +7,13 @@
             "description": "Name of the actor",
             "type": "string"
         },
-        "decription": {
+        "description": {
             "description": "A description of the actor",
             "type": "string"
         },
         "awards": {
             "description": "Awards that the actor have",
-            "type": "string"
+            "type": "number"
         },
         "gender": {
             "description": "The gender of the actor",
@@ -31,11 +30,16 @@
         "curiosities": {
             "description": "Curiosities about the actor",
             "type": "string"
+        },
+        "image": {
+            "description": "Image that the actor have",
+            "type": "string"
         }
     },
     "required": [
         "name",
-        "decription",
+        "description",
+        "awards",
         "gender",
         "height",
         "weight",

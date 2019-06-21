@@ -1,5 +1,4 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
     "title": "Director",
     "description": "Director that produces the movie",
     "type": "object",
@@ -8,17 +7,27 @@
             "description": "Name of the director",
             "type": "string"
         },
-        "decription": {
+        "description": {
             "description": "A description of the director",
+            "type": "string"
+        },
+        "gender": {
+            "description": "The gender of the director",
             "type": "string"
         },
         "awards": {
             "description": "Awards that the director have",
+            "type": "number"
+        },
+        "image": {
+            "description": "Image that the director have",
             "type": "string"
         }
     },
     "required": [
         "name",
-        "decription"
+        "description",
+        "awards",
+        "gender"
     ]
 }

@@ -76,6 +76,12 @@ function createClasses(config) {
                 return str6;
             }    
         }
+        
+        config.frontOffice.forEach(function(element){
+            if(element.model === view.classTitle){
+                view.hasOrdered = true;
+            }
+        });
 
         fs.readFile('./Server/models/class.mustache', function (err, data) {
             const output = mustache.render(data.toString(), view);

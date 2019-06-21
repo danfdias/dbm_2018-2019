@@ -1,5 +1,4 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
     "title": "Movie",
     "description": "Movie to be watched",
     "type": "object",
@@ -14,11 +13,11 @@
         },
         "imdb_pontuation": {
             "description": "IMDB pontuation of the movie",
-            "type": "number"
+            "type": "double"
         },
         "awards": {
-            "description": "Awards that movie have",
-            "type": "string"
+            "description": "Awards that movie has",
+            "type": "number"
         },
         "language": {
             "description": "The language of the movie",
@@ -26,14 +25,18 @@
         },
         "budget": {
             "description": "The budget of the movie",
-            "type": "number"
+            "type": "double"
         },
         "duration": {
             "description": "The time of the movie",
-            "type": "string"
+            "type": "number"
         },
         "age_restriction": {
-            "description": "The restriction of age that movie have",
+            "description": "The restriction of age that movie has",
+            "type": "number"
+        },
+        "image": {
+            "description": "The image that movie has",
             "type": "string"
         }
     },
@@ -43,7 +46,9 @@
         "imdb_pontuation",
         "language",
         "duration",
-        "age_restriction"
+        "age_restriction",
+        "budget",
+        "awards"
     ],
     "references": [
         {

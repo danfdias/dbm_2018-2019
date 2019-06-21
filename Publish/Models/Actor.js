@@ -1,17 +1,18 @@
 var database = require('../Database/sqlite.js')('./Publish/Database/projeto_dbm.db');
 
 class Actor {
-    constructor (name,decription,awards,gender,height,weight,curiosities) {
+    constructor (name,description,awards,gender,height,weight,curiosities,image) {
         this.id = undefined;
         this.name = name;
-        this.decription = decription;
+        this.description = description;
         this.awards = awards;
         this.gender = gender;
         this.height = height;
         this.weight = weight;
         this.curiosities = curiosities;
+        this.image = image;
         
-        Object.defineProperty(this, 'awards', { enumerable: false });
+        Object.defineProperty(this, 'image', { enumerable: false });
     }    
 }
 
@@ -21,12 +22,13 @@ class Actor {
 Actor.mappingDBtoObject = {
   actor_id: 'id',
   name: 'name',
-  decription: 'decription',
+  description: 'description',
   awards: 'awards',
   gender: 'gender',
   height: 'height',
   weight: 'weight',
   curiosities: 'curiosities',
+  image: 'image',
 };
 
 
@@ -53,12 +55,12 @@ Actor.get = function (id, callback) {
 Actor.prototype.save = function (callback) {
     if(this.id) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
-        database.run('UPDATE Actor SET name = ?, decription = ?, awards = ?, gender = ?, height = ?, weight = ?, curiosities = ? WHERE actor_id = ?',[this.name,this.decription,this.awards,this.gender,this.height,this.weight,this.curiosities,this.id],function(rows){
+        database.run('UPDATE Actor SET name = ?, description = ?, awards = ?, gender = ?, height = ?, weight = ?, curiosities = ?, image = ? WHERE actor_id = ?',[this.name,this.description,this.awards,this.gender,this.height,this.weight,this.curiosities,this.image,this.id],function(rows){
             callback(rows);
         });
     } else { //caso contrÃ¡rio para insert
         //fazer a chamada a  funcao run do database para inserir o registo
-        database.run('INSERT INTO Actor (name,decription,awards,gender,height,weight,curiosities) VALUES (?,?,?,?,?,?,?)',[this.name,this.decription,this.awards,this.gender,this.height,this.weight,this.curiosities],function(rows){
+        database.run('INSERT INTO Actor (name,description,awards,gender,height,weight,curiosities,image) VALUES (?,?,?,?,?,?,?,?)',[this.name,this.description,this.awards,this.gender,this.height,this.weight,this.curiosities,this.image],function(rows){
             callback(rows);
         });
     }
@@ -73,5 +75,20 @@ Actor.delete = function (id, callback) {
         callback(rows);
     });
 } 
+
+/**
+ * Função que executa uma query que devolve todas as entradas da tabela Actor ordenados por um determinado valor, 
+ * com um determinado limite e ordenados de uma determinada maneira, estas 3 informações são recebidas no metodo
+ *
+ * @param {*} property Nome da propriedade com que as entradas vao ser ordenadas
+ * @param {*} order Tipo de ordenação da informação devolvida (Decrescente ou Ascedente)
+ * @param {*} limit Numero máximo de entradas a serem devolvidas pela query
+ * @callback função callback que vai ser chamada para processar a informação recebida da base de dados
+ */
+Actor.top = function (property, order, limit, callback){
+    database.where(`SELECT * FROM Actor ORDER BY ${property} ${order} LIMIT ${limit}`, [], Actor, function(rows){
+        callback(rows);
+    });
+}
 
 module.exports = Actor;

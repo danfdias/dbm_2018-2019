@@ -4,35 +4,138 @@
     "schemas": [
         {
             "name": "Actor",
-            "path": "./Server/Schemas/actor-schema.json"
-        },
-        {
-            "name": "Category",
-            "path": "./Server/Schemas/category-schema.json"
+            "path": "./Server/Schemas/actor-schema.json",
+            "icon": "fas fa-users"
         },
         {
             "name": "Director",
-            "path": "./Server/Schemas/director-schema.json"
+            "path": "./Server/Schemas/director-schema.json",
+            "icon": "fas fa-users"
+        },
+        {
+            "name": "Category",
+            "path": "./Server/Schemas/category-schema.json",
+            "icon": "fas fa-filter"
         },
         {
             "name": "Movie",
-            "path": "./Server/Schemas/movie-schema.json"
+            "path": "./Server/Schemas/movie-schema.json",
+            "icon": "fas fa-film"
         },
         {
             "name": "Place",
-            "path": "./Server/Schemas/place-schema.json"
+            "path": "./Server/Schemas/place-schema.json",
+            "icon": "fas fa-couch"
         },
         {
             "name": "Room",
-            "path": "./Server/Schemas/room_cinema-schema.json"
+            "path": "./Server/Schemas/room_cinema-schema.json",
+            "icon": "fas fa-person-booth"
         },
         {
             "name": "Ticket",
-            "path": "./Server/Schemas/ticket-schema.json"
+            "path": "./Server/Schemas/ticket-schema.json",
+            "icon": "fas fa-ticket-alt"
         }
     ],
-    "staticFiles": [{
-        "originalPath":"./Server/Database/sqlite.js",
-        "destinationPath":"./Publish/Database/sqlite.js"
-    }]
+    "frontOffice": [           
+        {
+            "model": "Actor",
+            "property": "awards",
+            "order": "DESC",
+            "limit": 10,
+            "title": "TOP 10 ACTORS (AWARDS)"
+        },     
+        {
+            "model": "Movie",
+            "property": "imdb_pontuation",
+            "order": "DESC",
+            "limit": 10,
+            "title": "TOP 10 MOVIES (IMDb)"
+        },
+        {
+            "model": "Director",
+            "property": "awards",
+            "order": "DESC",
+            "limit": 10,
+            "title": "TOP 10 DIRECTORS (AWARDS)"
+        },
+        {
+            "model": "Movie",
+            "property": "awards",
+            "order": "DESC",
+            "limit": 10,
+            "title": "TOP 10 MOVIES (AWARDS)"
+        }
+    ],
+    "staticFiles": [
+        {
+            "originalPath": "./Server/Database/sqlite.js",
+            "destinationPath": "./Publish/Database/sqlite.js"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/details.mustache",
+            "destinationPath": "./Publish/Views/details.mustache"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/form1.mustache",
+            "destinationPath": "./Publish/Views/form1.mustache"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/form2.mustache",
+            "destinationPath": "./Publish/Views/form2.mustache"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/list.mustache",
+            "destinationPath": "./Publish/Views/list.mustache"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/welcome.mustache",
+            "destinationPath": "./Publish/Views/welcome.mustache"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/delete.png",
+            "destinationPath": "./Publish/Public/Images/delete.png"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/edit.png",
+            "destinationPath": "./Publish/Public/Images/edit.png"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/read.png",
+            "destinationPath": "./Publish/Public/Images/read.png"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/frontoffice.mustache",
+            "destinationPath": "./Publish/Views/frontoffice.mustache"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/menu.mustache",
+            "destinationPath": "./Publish/Views/menu.mustache"
+        },
+        {
+            "originalPath": "./Server/StaticFiles/css.mustache",
+            "destinationPath": "./Publish/Views/css.mustache"
+        },
+        {
+            "originalPath": "./Server/Populate/populate-db.js",
+            "destinationPath": "./Publish/Populate/populate-db.js"
+        },
+        {
+            "originalPath": "./Server/CssStyles/default.css",
+            "destinationPath": "./Publish/Public/Css/default.css"
+        },
+        {
+            "originalPath": "./Server/CssStyles/nav.css",
+            "destinationPath": "./Publish/Public/Css/nav.css"
+        },
+        {
+            "originalPath": "./Server/CssStyles/all.css",
+            "destinationPath": "./Publish/Public/Css/all.css"
+        },
+        {
+            "originalPath": "./Server/CssStyles/tops.css",
+            "destinationPath": "./Publish/Public/Css/tops.css"
+        }
+    ]
 }

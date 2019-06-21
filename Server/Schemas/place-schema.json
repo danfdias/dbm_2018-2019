@@ -1,5 +1,4 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
     "title": "Place",
     "description": "The place that users sits to watch the movie",
     "type": "object",

@@ -1,16 +1,15 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
     "title": "Room",
     "description": "Room where user see a movie",
     "type": "object",
     "properties": {
-        "numero": {
+        "number": {
             "description": "Number of the room",
             "type": "integer"
         }
     },
     "required": [
-        "numero"
+        "number"
     ],
     "references": [
         {
