@@ -1,0 +1,22 @@
+<html>
+    <head>
+    {{>css}}
+    </head>
+    <body>
+    {{>menu}}    
+        <div id="details-bigbox">  
+            <div class="box-header-details">
+                <span id="span_titulo">DETALHES - {{title}}</span>
+            </div>           
+            <div id="details-box">
+                <img id="imageDetails" src="{{imagePath}}"></img>
+                <div id="details">
+                    {{#properties}}
+                        <span id="details_propname">{{name}}</span>
+                        <span id="details_propvalue">{{value}}</span>
+                    {{/properties}} 
+                </div> 
+            </div>      
+        </div>
+    </body>
+</html>

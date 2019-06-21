@@ -1,0 +1,17 @@
+<html>
+    <head>
+    {{>css}}
+    </head>
+    <body>
+    {{>menu}}
+        <form action="../../api/{{title}}" method="POST">
+            {{#properties}}
+            <div>
+                <label>{{name}} {{#required}}<span id="required_span">*</span>{{/required}}</label>
+                <input type="{{type}}" name="{{name}}" {{#required}}required{{/required}} />
+            </div>
+            {{/properties}}
+            <input type="submit" value="Inserir" />
+        </form>
+    </body>
+</html>

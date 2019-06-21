@@ -1,9 +1,9 @@
 var database = require('../Database/sqlite.js')('./Publish/Database/projeto_dbm.db');
 
 class Room {
-    constructor (numero) {
+    constructor (number) {
         this.id = undefined;
-        this.numero = numero;
+        this.number = number;
         
     }    
 }
@@ -13,7 +13,7 @@ class Room {
 */
 Room.mappingDBtoObject = {
   room_id: 'id',
-  numero: 'numero',
+  number: 'number',
 };
 
 
@@ -37,15 +37,15 @@ Room.get = function (id, callback) {
 /**
 * Funcao save que faz o insert/update de uma coluna a tabela Room
 */
-Room.prototype.save = function (callback) {
-    if(this.id) { //Se existir valor no id serÃ¡ para update
+Room.prototype.save = function (callback) {    
+    if(this.id != undefined) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
-        database.run('UPDATE Room SET numero = ? WHERE room_id = ?',[this.numero,this.id],function(rows){
+        database.run('UPDATE Room SET number = ? WHERE room_id = ?',[this.number,this.id],function(rows){
             callback(rows);
         });
     } else { //caso contrÃ¡rio para insert
         //fazer a chamada a  funcao run do database para inserir o registo
-        database.run('INSERT INTO Room (numero) VALUES (?)',[this.numero],function(rows){
+        database.run('INSERT INTO Room (number) VALUES (?)',[this.number],function(rows){
             callback(rows);
         });
     }
@@ -56,9 +56,10 @@ Room.prototype.save = function (callback) {
 */
 Room.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM Room WHERE room_id = ?',[id],Room,function(rows){
-        callback(rows);
+    database.run(`DELETE FROM Room WHERE room_id = ?`,[id],function(){
+        callback();
     });
 } 
+
 
 module.exports = Room;

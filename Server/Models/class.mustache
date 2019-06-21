@@ -44,8 +44,8 @@ class {{classTitle}} {
 /**
 * Funcao save que faz o insert/update de uma coluna a tabela {{classTitle}}
 */
-{{classTitle}}.prototype.save = function (callback) {
-    if(this.{{primaryKey.name}}) { //Se existir valor no id serÃ¡ para update
+{{classTitle}}.prototype.save = function (callback) {    
+    if(this.{{primaryKey.name}} != undefined) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
         database.run('UPDATE {{classTitle}} SET {{{updateProps}}} WHERE {{classTitleLower}}_id = ?',[{{conditions}},this.id],function(rows){
             callback(rows);
@@ -63,9 +63,26 @@ class {{classTitle}} {
 */
 {{classTitle}}.delete = function (id, callback) {
     //fazer a chamada a  funcao run do database para apagar um registo na base de dados
-    database.run('DELETE * FROM {{classTitle}} WHERE {{classTitleLower}}_id = ?',[id],{{classTitle}},function(rows){
-        callback(rows);
+    database.run(`DELETE FROM {{classTitle}} WHERE {{classTitleLower}}_id = ?`,[id],function(){
+        callback();
     });
 } 
+
+{{#hasOrdered}}
+/**
+ * Função que executa uma query que devolve todas as entradas da tabela {{classTitle}} ordenados por um determinado valor, 
+ * com um determinado limite e ordenados de uma determinada maneira, estas 3 informações são recebidas no metodo
+ *
+ * @param {*} property Nome da propriedade com que as entradas vao ser ordenadas
+ * @param {*} order Tipo de ordenação da informação devolvida (Decrescente ou Ascedente)
+ * @param {*} limit Numero máximo de entradas a serem devolvidas pela query
+ * @callback função callback que vai ser chamada para processar a informação recebida da base de dados
+ */
+{{classTitle}}.top = function (property, order, limit, callback){
+    database.where(`SELECT * FROM {{classTitle}} ORDER BY ${property} ${order} LIMIT ${limit}`, [], {{classTitle}}, function(rows){
+        callback(rows);
+    });
+}
+{{/hasOrdered}}
 
 module.exports = {{classTitle}};

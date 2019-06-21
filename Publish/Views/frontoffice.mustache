@@ -1,0 +1,98 @@
+<html>
+<head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    {{>css}}
+    <title>Projeto DBM Published</title>
+</head>
+    <body>
+        {{>menu}}
+        <div id="top-container">
+            <div class="container-fluid max-container container-left">
+                <div class="container">  
+                    <div class="box-header">
+                        <span>{{titles.0}}</span>
+                    </div>               
+                    <div class="row rtl text-center">
+                        {{#query1_first5}}
+                        <div class="col box">                        
+                            <img id="image" src="{{image}}" title="{{@index++}} - {{name}}"></img>
+                        </div>                    
+                        {{/query1_first5}}
+                    </div>
+                    <div class="row rtl text-center">                
+                        {{#query1_last5}}
+                        <div class="col box">
+                            <img id="image" src="{{image}}" title="{{@index + 5}} - {{name}}"></img>
+                        </div>
+                        {{/query1_last5}}
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid max-container container-right">
+                <div class="container">  
+                    <div class="box-header">
+                        <span>{{titles.1}}</span>
+                    </div>                 
+                    <div class="row rtl text-center">
+                        {{#query2_first5}}
+                        <div class="col box">                        
+                            <img id="image" src="{{image}}" title="{{@index++}} - {{title}}"></img>
+                        </div>                    
+                        {{/query2_first5}}
+                    </div>
+                    <div class="row rtl text-center">                
+                        {{#query2_last5}}
+                        <div class="col box">
+                            <img id="image" src="{{image}}" title="{{@index + 5}} - {{title}}"></img>
+                        </div>
+                        {{/query2_last5}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="top-container">
+            <div class="container-fluid max-container container-left">
+                <div class="container">  
+                    <div class="box-header">
+                        <span>{{titles.2}}</span>
+                    </div>                 
+                    <div class="row rtl text-center">
+                        {{#query3_first5}}
+                        <div class="col box">                        
+                            <img id="image" src="{{image}}" title="{{@index++}} - {{name}}"></img>
+                        </div>                    
+                        {{/query3_first5}}
+                    </div>
+                    <div class="row rtl text-center">                
+                        {{#query3_last5}}
+                        <div class="col box">
+                            <img id="image" src="{{image}}" title="{{@index + 5}} - {{name}}"></img>
+                        </div>
+                        {{/query3_last5}}
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid max-container container-right">
+                <div class="container">  
+                    <div class="box-header">
+                        <span>{{titles.3}}</span>
+                    </div>                   
+                    <div class="row rtl text-center">
+                        {{#query4_first5}}
+                        <div class="col box">                        
+                            <img id="image" src="{{image}}" title="{{@index++}} - {{title}}"></img>
+                        </div>                    
+                        {{/query4_first5}}
+                    </div>
+                    <div class="row rtl text-center">                
+                        {{#query4_last5}}
+                        <div class="col box">
+                            <img id="image" src="{{image}}" title="{{@index + 5}} - {{title}}"></img>
+                        </div>
+                        {{/query4_last5}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -8,27 +8,27 @@ var router = express.Router();
 * @returns Devolve um objeto do tipo 'type' com o conteúdo que está no objeto 'object'
 */
 function mapping(object, type) {
-   var obj = new type();
-   Object.keys(object).forEach(function (value) {
+    var obj = new type();
+    Object.keys(object).forEach(function (value) {
         //Se o objeto possuir o atributo que se está a verificar então recebe o valor retornado da query da base de dados
-        if (obj.hasOwnProperty(value)){
-           obj[value] = object[value];
+        if (obj.hasOwnProperty(value.toLowerCase())){
+            obj[value.toLowerCase()] = object[value];
         }
-   });
-   return obj;
+    });
+    return obj;
 }
 
 /************************************************************************************************************************************/
 /**************************************************** Actor ***********************************************************/
 /************************************************************************************************************************************/
 
-var Actor = require('../Models/Actor.js');
+var actor = require('../Models/Actor.js');
 
 /**
 * rota que chama a funcao save para fazer um insert a tabela Actor
 */
 router.post('/Actor', function (req, res) {
-    mapping(req.body, Actor).save(function(){
+    mapping(req.body, actor).save(function(){
         res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
@@ -37,8 +37,8 @@ router.post('/Actor', function (req, res) {
 * rota que chama a funcao all que faz um select de toda a informacao numa tabela Actor
 */
 router.get('/Actor', function (req, res) {
-    Actor.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(JSON.stringify(rows));
+    actor.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
+        res.json(rows);
     });
 });
 
@@ -46,21 +46,19 @@ router.get('/Actor', function (req, res) {
 * rota que chama a funcao get que faz um select de uma determinada coluna a tabela Actor 
 */
 router.get('/Actor/:id', function (req, res) {
-    Actor.get(req.params.id, function (row) {
-        res.json(JSON.stringify(row));
+    actor.get(req.params.id, function (row) {
+        res.json(row);
     });
 });
 
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Actor
 */
-router.put('/Actor/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
-    var obj = mapping(req.body, Actor);
+router.post('/Actor/:id', function (req, res) { 
+    var obj = mapping(req.body, actor);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Actor");
     });
 });
 
@@ -68,79 +66,22 @@ router.put('/Actor/:id', function (req, res) { //o id tanto poderia ir no corpo 
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Actor
 */
 router.delete('/Actor/:id', function (req, res) {
-    Actor.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
-    });
-});
-/************************************************************************************************************************************/
-/**************************************************** Category ***********************************************************/
-/************************************************************************************************************************************/
-
-var Category = require('../Models/Category.js');
-
-/**
-* rota que chama a funcao save para fazer um insert a tabela Category
-*/
-router.post('/Category', function (req, res) {
-    mapping(req.body, Category).save(function(){
-        res.send('Registo Inserido');
-        }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
-});
-
-/**
-* rota que chama a funcao all que faz um select de toda a informacao numa tabela Category
-*/
-router.get('/Category', function (req, res) {
-    Category.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(JSON.stringify(rows));
+    actor.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 
-/**
-* rota que chama a funcao get que faz um select de uma determinada coluna a tabela Category 
-*/
-router.get('/Category/:id', function (req, res) {
-    Category.get(req.params.id, function (row) {
-        res.json(JSON.stringify(row));
-    });
-});
-
-/**
-* rota que chama a funcao save para fazer um update de uma coluna a tabela Category
-*/
-router.put('/Category/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
-    var obj = mapping(req.body, Category);
-    obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
-    obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
-    });
-});
-
-/**
-* rota que chama a funcao delete que faz um delete de uma coluna da tabela Category
-*/
-router.delete('/Category/:id', function (req, res) {
-    Category.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
-    });
-});
 /************************************************************************************************************************************/
 /**************************************************** Director ***********************************************************/
 /************************************************************************************************************************************/
 
-var Director = require('../Models/Director.js');
+var director = require('../Models/Director.js');
 
 /**
 * rota que chama a funcao save para fazer um insert a tabela Director
 */
 router.post('/Director', function (req, res) {
-    mapping(req.body, Director).save(function(){
+    mapping(req.body, director).save(function(){
         res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
@@ -149,8 +90,8 @@ router.post('/Director', function (req, res) {
 * rota que chama a funcao all que faz um select de toda a informacao numa tabela Director
 */
 router.get('/Director', function (req, res) {
-    Director.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(JSON.stringify(rows));
+    director.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
+        res.json(rows);
     });
 });
 
@@ -158,21 +99,19 @@ router.get('/Director', function (req, res) {
 * rota que chama a funcao get que faz um select de uma determinada coluna a tabela Director 
 */
 router.get('/Director/:id', function (req, res) {
-    Director.get(req.params.id, function (row) {
-        res.json(JSON.stringify(row));
+    director.get(req.params.id, function (row) {
+        res.json(row);
     });
 });
 
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Director
 */
-router.put('/Director/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
-    var obj = mapping(req.body, Director);
+router.post('/Director/:id', function (req, res) { 
+    var obj = mapping(req.body, director);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Director");
     });
 });
 
@@ -180,23 +119,75 @@ router.put('/Director/:id', function (req, res) { //o id tanto poderia ir no cor
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Director
 */
 router.delete('/Director/:id', function (req, res) {
-    Director.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    director.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
+
+/************************************************************************************************************************************/
+/**************************************************** Category ***********************************************************/
+/************************************************************************************************************************************/
+
+var category = require('../Models/Category.js');
+
+/**
+* rota que chama a funcao save para fazer um insert a tabela Category
+*/
+router.post('/Category', function (req, res) {
+    mapping(req.body, category).save(function(){
+        res.send('Registo Inserido');
+        }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
+});
+
+/**
+* rota que chama a funcao all que faz um select de toda a informacao numa tabela Category
+*/
+router.get('/Category', function (req, res) {
+    category.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
+        res.json(rows);
+    });
+});
+
+/**
+* rota que chama a funcao get que faz um select de uma determinada coluna a tabela Category 
+*/
+router.get('/Category/:id', function (req, res) {
+    category.get(req.params.id, function (row) {
+        res.json(row);
+    });
+});
+
+/**
+* rota que chama a funcao save para fazer um update de uma coluna a tabela Category
+*/
+router.post('/Category/:id', function (req, res) { 
+    var obj = mapping(req.body, category);
+    obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
+    obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
+        res.redirect("http://localhost:8082/backoffice/Category");
+    });
+});
+
+/**
+* rota que chama a funcao delete que faz um delete de uma coluna da tabela Category
+*/
+router.delete('/Category/:id', function (req, res) {
+    category.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
+    });
+});
+
 /************************************************************************************************************************************/
 /**************************************************** Movie ***********************************************************/
 /************************************************************************************************************************************/
 
-var Movie = require('../Models/Movie.js');
+var movie = require('../Models/Movie.js');
 
 /**
 * rota que chama a funcao save para fazer um insert a tabela Movie
 */
 router.post('/Movie', function (req, res) {
-    mapping(req.body, Movie).save(function(){
+    mapping(req.body, movie).save(function(){
         res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
@@ -205,8 +196,8 @@ router.post('/Movie', function (req, res) {
 * rota que chama a funcao all que faz um select de toda a informacao numa tabela Movie
 */
 router.get('/Movie', function (req, res) {
-    Movie.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(JSON.stringify(rows));
+    movie.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
+        res.json(rows);
     });
 });
 
@@ -214,21 +205,19 @@ router.get('/Movie', function (req, res) {
 * rota que chama a funcao get que faz um select de uma determinada coluna a tabela Movie 
 */
 router.get('/Movie/:id', function (req, res) {
-    Movie.get(req.params.id, function (row) {
-        res.json(JSON.stringify(row));
+    movie.get(req.params.id, function (row) {
+        res.json(row);
     });
 });
 
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Movie
 */
-router.put('/Movie/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
-    var obj = mapping(req.body, Movie);
+router.post('/Movie/:id', function (req, res) { 
+    var obj = mapping(req.body, movie);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Movie");
     });
 });
 
@@ -236,23 +225,22 @@ router.put('/Movie/:id', function (req, res) { //o id tanto poderia ir no corpo 
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Movie
 */
 router.delete('/Movie/:id', function (req, res) {
-    Movie.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    movie.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
+
 /************************************************************************************************************************************/
 /**************************************************** Place ***********************************************************/
 /************************************************************************************************************************************/
 
-var Place = require('../Models/Place.js');
+var place = require('../Models/Place.js');
 
 /**
 * rota que chama a funcao save para fazer um insert a tabela Place
 */
 router.post('/Place', function (req, res) {
-    mapping(req.body, Place).save(function(){
+    mapping(req.body, place).save(function(){
         res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
@@ -261,8 +249,8 @@ router.post('/Place', function (req, res) {
 * rota que chama a funcao all que faz um select de toda a informacao numa tabela Place
 */
 router.get('/Place', function (req, res) {
-    Place.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(JSON.stringify(rows));
+    place.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
+        res.json(rows);
     });
 });
 
@@ -270,21 +258,19 @@ router.get('/Place', function (req, res) {
 * rota que chama a funcao get que faz um select de uma determinada coluna a tabela Place 
 */
 router.get('/Place/:id', function (req, res) {
-    Place.get(req.params.id, function (row) {
-        res.json(JSON.stringify(row));
+    place.get(req.params.id, function (row) {
+        res.json(row);
     });
 });
 
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Place
 */
-router.put('/Place/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
-    var obj = mapping(req.body, Place);
+router.post('/Place/:id', function (req, res) { 
+    var obj = mapping(req.body, place);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Place");
     });
 });
 
@@ -292,23 +278,22 @@ router.put('/Place/:id', function (req, res) { //o id tanto poderia ir no corpo 
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Place
 */
 router.delete('/Place/:id', function (req, res) {
-    Place.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    place.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
+
 /************************************************************************************************************************************/
 /**************************************************** Room ***********************************************************/
 /************************************************************************************************************************************/
 
-var Room = require('../Models/Room.js');
+var room = require('../Models/Room.js');
 
 /**
 * rota que chama a funcao save para fazer um insert a tabela Room
 */
 router.post('/Room', function (req, res) {
-    mapping(req.body, Room).save(function(){
+    mapping(req.body, room).save(function(){
         res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
@@ -317,8 +302,8 @@ router.post('/Room', function (req, res) {
 * rota que chama a funcao all que faz um select de toda a informacao numa tabela Room
 */
 router.get('/Room', function (req, res) {
-    Room.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(JSON.stringify(rows));
+    room.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
+        res.json(rows);
     });
 });
 
@@ -326,21 +311,19 @@ router.get('/Room', function (req, res) {
 * rota que chama a funcao get que faz um select de uma determinada coluna a tabela Room 
 */
 router.get('/Room/:id', function (req, res) {
-    Room.get(req.params.id, function (row) {
-        res.json(JSON.stringify(row));
+    room.get(req.params.id, function (row) {
+        res.json(row);
     });
 });
 
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Room
 */
-router.put('/Room/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
-    var obj = mapping(req.body, Room);
+router.post('/Room/:id', function (req, res) { 
+    var obj = mapping(req.body, room);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Room");
     });
 });
 
@@ -348,23 +331,22 @@ router.put('/Room/:id', function (req, res) { //o id tanto poderia ir no corpo d
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Room
 */
 router.delete('/Room/:id', function (req, res) {
-    Room.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    room.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
+
 /************************************************************************************************************************************/
 /**************************************************** Ticket ***********************************************************/
 /************************************************************************************************************************************/
 
-var Ticket = require('../Models/Ticket.js');
+var ticket = require('../Models/Ticket.js');
 
 /**
 * rota que chama a funcao save para fazer um insert a tabela Ticket
 */
 router.post('/Ticket', function (req, res) {
-    mapping(req.body, Ticket).save(function(){
+    mapping(req.body, ticket).save(function(){
         res.send('Registo Inserido');
         }); //converte o objeto retornado no corpo do pedido num objeto do tipo Aluno
 });
@@ -373,8 +355,8 @@ router.post('/Ticket', function (req, res) {
 * rota que chama a funcao all que faz um select de toda a informacao numa tabela Ticket
 */
 router.get('/Ticket', function (req, res) {
-    Ticket.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
-        res.json(JSON.stringify(rows));
+    ticket.all(function (rows) { //função de callback que quando for retornado os dados na base de dados, os mesmos serão enviados em json
+        res.json(rows);
     });
 });
 
@@ -382,21 +364,19 @@ router.get('/Ticket', function (req, res) {
 * rota que chama a funcao get que faz um select de uma determinada coluna a tabela Ticket 
 */
 router.get('/Ticket/:id', function (req, res) {
-    Ticket.get(req.params.id, function (row) {
-        res.json(JSON.stringify(row));
+    ticket.get(req.params.id, function (row) {
+        res.json(row);
     });
 });
 
 /**
 * rota que chama a funcao save para fazer um update de uma coluna a tabela Ticket
 */
-router.put('/Ticket/:id', function (req, res) { //o id tanto poderia ir no corpo da mensagem como por parâmetro no url
-    var obj = mapping(req.body, Ticket);
+router.post('/Ticket/:id', function (req, res) { 
+    var obj = mapping(req.body, ticket);
     obj.id = req.params.id; //no caso de ir no corpo da mensagem tem de se fazer a atribuição do id após o mapeamento do objeto
     obj.save(function (err) { //devolve true em caso de ter feito o save sem qualquer erro
-        res.json({
-            success: !err
-        });
+        res.redirect("http://localhost:8082/backoffice/Ticket");
     });
 });
 
@@ -404,10 +384,8 @@ router.put('/Ticket/:id', function (req, res) { //o id tanto poderia ir no corpo
 * rota que chama a funcao delete que faz um delete de uma coluna da tabela Ticket
 */
 router.delete('/Ticket/:id', function (req, res) {
-    Ticket.delete(req.params.id, function (err) {
-        res.json({
-            success: !err
-        });
+    ticket.delete(parseInt(req.params.id), function () {
+        res.json("Registo Eliminado");
     });
 });
 

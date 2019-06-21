@@ -4,9 +4,9 @@ html, body{
     padding: 0;
     width: 100%;   
     height: 100%; 
-    background-color: #f6f6f6 !important;
-    font-family: "Open Sans", sans-serif;
+    background-color: #cfcfcf !important;
     line-height: 1.25;
+    font-family: 'Slabo 27px', serif;
 }
 
 #formulario{
@@ -97,34 +97,15 @@ table {
       text-decoration: none;
   }
 
-  .button {
-    --color: #008000;
-    min-width: 16rem;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 2rem;
-    background:
-      var(--color)
-      linear-gradient(
-        rgba(255, 255, 255, 0.2),
-        rgba(0, 0, 0, 0.2)
-      )
-    ;
-    color: #ffffff;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    line-height: 1;
-    cursor: pointer
+  #start{
+    width: 100%;
+    height: 60%;
   }
-  .button:hover,
-  .button:focus {
-    background:
-      var(--color)
-      linear-gradient(
-        rgba(0, 0, 0, 0.2),
-        rgba(255, 255, 255, 0.2)
-      )
-    ;
+
+  #divBox{
+    width: 100%;
+    height: 60%;
   }
+
+  
   
