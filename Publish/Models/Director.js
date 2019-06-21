@@ -1,10 +1,10 @@
 var database = require('../Database/sqlite.js')('./Publish/Database/projeto_dbm.db');
 
 class Director {
-    constructor (name,decription,gender,awards,image) {
+    constructor (name,description,gender,awards,image) {
         this.id = undefined;
         this.name = name;
-        this.decription = decription;
+        this.description = description;
         this.gender = gender;
         this.awards = awards;
         this.image = image;
@@ -19,7 +19,7 @@ class Director {
 Director.mappingDBtoObject = {
   director_id: 'id',
   name: 'name',
-  decription: 'decription',
+  description: 'description',
   gender: 'gender',
   awards: 'awards',
   image: 'image',
@@ -49,12 +49,12 @@ Director.get = function (id, callback) {
 Director.prototype.save = function (callback) {
     if(this.id) { //Se existir valor no id serÃ¡ para update
         //fazer a chamada a  funcao run do database para atualizar o registo
-        database.run('UPDATE Director SET name = ?, decription = ?, gender = ?, awards = ?, image = ? WHERE director_id = ?',[this.name,this.decription,this.gender,this.awards,this.image,this.id],function(rows){
+        database.run('UPDATE Director SET name = ?, description = ?, gender = ?, awards = ?, image = ? WHERE director_id = ?',[this.name,this.description,this.gender,this.awards,this.image,this.id],function(rows){
             callback(rows);
         });
     } else { //caso contrÃ¡rio para insert
         //fazer a chamada a  funcao run do database para inserir o registo
-        database.run('INSERT INTO Director (name,decription,gender,awards,image) VALUES (?,?,?,?,?)',[this.name,this.decription,this.gender,this.awards,this.image],function(rows){
+        database.run('INSERT INTO Director (name,description,gender,awards,image) VALUES (?,?,?,?,?)',[this.name,this.description,this.gender,this.awards,this.image],function(rows){
             callback(rows);
         });
     }
@@ -70,5 +70,19 @@ Director.delete = function (id, callback) {
     });
 } 
 
+/**
+ * Função que executa uma query que devolve todas as entradas da tabela Director ordenados por um determinado valor, 
+ * com um determinado limite e ordenados de uma determinada maneira, estas 3 informações são recebidas no metodo
+ *
+ * @param {*} property Nome da propriedade com que as entradas vao ser ordenadas
+ * @param {*} order Tipo de ordenação da informação devolvida (Decrescente ou Ascedente)
+ * @param {*} limit Numero máximo de entradas a serem devolvidas pela query
+ * @callback função callback que vai ser chamada para processar a informação recebida da base de dados
+ */
+Director.top = function (property, order, limit, callback){
+    database.where(`SELECT * FROM Director ORDER BY ${property} ${order} LIMIT ${limit}`, [], Director, function(rows){
+        callback(rows);
+    });
+}
 
 module.exports = Director;

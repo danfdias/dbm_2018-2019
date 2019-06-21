@@ -5,12 +5,14 @@ body {
 }
 .navigation{
     width: 100%;
+    height: 70px;
     background: #cd5c5c;
 }
 i{
-    font-size: 16px !important;
+    font-size: 16px ;
 }
 #main{
+    height: 100%;
     margin-left: auto;
     margin-right: auto;
     display:inline-block;
@@ -18,11 +20,8 @@ i{
 .content {
   padding: 40px 20px;
 }
-nav {
-  margin-bottom: 20px;
-}
 nav > ul {
-  list-style-type: none !important;
+  list-style-type: none;
   margin: 0;
   padding: 0;
   font-size: 0;
@@ -30,11 +29,8 @@ nav > ul {
 }
 nav > ul > li {
   display: inline-block;
-  position: relative;
-  padding: 10px;
-}
-nav > ul > li.more > a .fa {
-  color: yellow;
+  height: 100%;
+  width: 70px;
 }
 nav > ul > li.hidden {
   display: none;
@@ -46,7 +42,7 @@ nav > ul > li a {
   color: #fff;
   text-align: center;
   text-decoration: none;
-  padding: 5px 20px;
+  height: 100%;
 }
 nav > ul > li a .fa {
   font-size: 16px;
@@ -82,3 +78,12 @@ nav > ul > li:hover > a {
 nav > ul > li:hover ul {
   display: block;
 }
+.button{
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer
+ }

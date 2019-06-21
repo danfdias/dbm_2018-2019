@@ -24,9 +24,17 @@ module.exports.generate = function (name, schema) {
             personProps.forEach((p, i) => {
                 var typeAUx = schema.properties[p].type;
                 str += p;
-                if (typeAUx === "integer") str += " " + typeAUx;
-                if (typeAUx === "string") str += " " + "text NOT NULL"
-                if (typeAUx === "number") str += " FLOAT";
+                switch (typeAUx) {
+                    case 'string':
+                        str += " text NOT NULL";
+                        break;
+                    case 'number':
+                        str += " integer";
+                        break;
+                    case 'double':
+                        str += " real";
+                        break;
+                }
                 if (schema.properties[p].unique === true) str += " " + "UNIQUE";
                 if (i < (personProps.length - 1)) str += ", \n"
             });
@@ -38,7 +46,7 @@ module.exports.generate = function (name, schema) {
                     var model = ref[i]["model"];
                     var rel = ref[i]["relation"];
                     if (rel === "1-M" || rel === "1-1") {
-                        str += ",\n" + model.toLowerCase() + "_id integer NOT NULL "
+                        str += ",\n" + model.toLowerCase() + "_id integer NULL "
                         fks += ",\nFOREIGN KEY (" + model.toLowerCase() + "_id) REFERENCES " + model + "(" + model.toLowerCase() + "_id)";
                     }
                     if (rel === "M-M") {

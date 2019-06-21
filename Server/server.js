@@ -6,7 +6,6 @@ var dbGenerator = require('./database/generate-database.js');
 var genController = require('./Controllers/generate-controller.js');
 var genBackOffice = require('./BackOffice/generate-backoffice.js');
 var genFrontOffice = require('./FrontOffice/generate-frontoffice.js');
-var populateDB = require('./Populate/populate-db.js');
 var path = require('path');
 var mustache = require('mustache');
 var child_process = require('child_process');
@@ -20,14 +19,16 @@ function generateFolders() {
     createDirectory('./Publish/Controllers');
     //Criar pasta Models
     createDirectory('./Publish/Models');
-    // Criar pasta Public + Public/Css + Public/Images + Public/Js
+    // Criar pasta Public + Public/Css + Public/Images + Public/Js + Public/webfonts
     createChainDirectory('./Publish/Public/Css');
     createDirectory('./Publish/Public/Images');
     createDirectory('./Publish/Public/Js');
-    // Criar pasta Populate + Populate/Actors + Populate/Movies + Populate/Directors
-    createChainDirectory('./Publish/Populate/Actors');
-    createDirectory('./Publish/Populate/Movies');
-    createDirectory('./Publish/Populate/Directors');
+    createDirectory('./Publish/Public/webfonts');
+    // Criar pasta Populate + Images/Actors + Images/Movies + Images/Directors
+    createChainDirectory('./Publish/Populate');
+    createDirectory('./Publish/Public/Images/Actors');
+    createDirectory('./Publish/Public/Images/Movies');
+    createDirectory('./Publish/Public/Images/Directors');
     // Criar pasta Views
     createDirectory('./Publish/Views');
     // Criar pasta Database
@@ -48,6 +49,17 @@ function generateFolders() {
             console.log('Saved!');
         });
     });
+    
+    //Escrever ficheiros na publicacao
+    var view = fs.readFileSync("./Server/config.json");
+    for (var i = 0; i < config.staticFiles.length; i++) {
+        var file = fs.readFileSync(config.staticFiles[i].originalPath);
+        console.log(file);
+        fs.writeFile(config.staticFiles[i].destinationPath, file, function (err) {
+            if (err)
+                console.log(err);
+        });
+    }
 
     // Criar DB
     config.schemas.forEach(function (schema) {
@@ -55,27 +67,14 @@ function generateFolders() {
         dbGenerator.generate(config.dbname, classSchema);
     });
     console.log('DB created \n');
-    //Popular DB
-    populateDB.execPopulate();
-    console.log('DB populated \n');
     //Copiar imagens DB    
-    ncp("Server/Populate/Actors/", "Publish/Populate/Actors");
-    ncp("Server/Populate/Directors/", "Publish/Populate/Directors");
-    ncp("Server/Populate/Movies/", "Publish/Populate/Movies");
+    ncp("Server/Populate/Actors/", "Publish/Public/Images/Actors");
+    ncp("Server/Populate/Directors/", "Publish/Public/Images/Directors");
+    ncp("Server/Populate/Movies/", "Publish/Public/Images/Movies");   
+    ncp("Server/CssStyles/webfonts/","Publish/Public/webfonts") ;
 
-    //Escrever ficheiros na publicacao
+    //Publicar index.js do novo servidor    
     var str = fs.readFileSync('./Server/server.mustache');
-    var view = fs.readFileSync("./Server/config.json");
-    for (var i = 0; i < config.staticFiles.length; i++) {
-        var file = fs.readFileSync(config.staticFiles[i].originalPath);
-        fs.writeFile(config.staticFiles[i].destinationPath, file, function (err) {
-            if (err)
-                console.log(err);
-        });
-    }
-
-    console.log("ERRO");
-    //Publicar index.js do novo servidor
     var output = mustache.render(str.toString(), JSON.parse(view));
     fs.writeFile('./Publish/index.js', output, function (err) {
         if (err)

@@ -4,57 +4,68 @@
     "schemas": [
         {
             "name": "Actor",
-            "path": "./Server/Schemas/actor-schema.json"
+            "path": "./Server/Schemas/actor-schema.json",
+            "icon": "fas fa-users"
         },
         {
             "name": "Director",
-            "path": "./Server/Schemas/director-schema.json"
+            "path": "./Server/Schemas/director-schema.json",
+            "icon": "fas fa-users"
         },
         {
             "name": "Category",
-            "path": "./Server/Schemas/category-schema.json"
+            "path": "./Server/Schemas/category-schema.json",
+            "icon": "fas fa-filter"
         },
         {
             "name": "Movie",
-            "path": "./Server/Schemas/movie-schema.json"
+            "path": "./Server/Schemas/movie-schema.json",
+            "icon": "fas fa-film"
         },
         {
             "name": "Place",
-            "path": "./Server/Schemas/place-schema.json"
+            "path": "./Server/Schemas/place-schema.json",
+            "icon": "fas fa-couch"
         },
         {
             "name": "Room",
-            "path": "./Server/Schemas/room_cinema-schema.json"
+            "path": "./Server/Schemas/room_cinema-schema.json",
+            "icon": "fas fa-person-booth"
         },
         {
             "name": "Ticket",
-            "path": "./Server/Schemas/ticket-schema.json"
+            "path": "./Server/Schemas/ticket-schema.json",
+            "icon": "fas fa-ticket-alt"
         }
     ],
-    "frontOffice": [        
-        {
-            "model": "Movie",
-            "property": "imdb_pontuation",
-            "order": "DESC",
-            "limit": 10
-        },
-        {
-            "model": "Movie",
-            "property": "awards",
-            "order": "DESC",
-            "limit": 10
-        },
-        {
-            "model": "Movie",
-            "property": "Budget",
-            "order": "DESC",
-            "limit": 10
-        },
+    "frontOffice": [           
         {
             "model": "Actor",
             "property": "awards",
             "order": "DESC",
-            "limit": 10
+            "limit": 10,
+            "title": "TOP 10 ACTORS (AWARDS)"
+        },     
+        {
+            "model": "Movie",
+            "property": "imdb_pontuation",
+            "order": "DESC",
+            "limit": 10,
+            "title": "TOP 10 MOVIES (IMDb)"
+        },
+        {
+            "model": "Director",
+            "property": "awards",
+            "order": "DESC",
+            "limit": 10,
+            "title": "TOP 10 DIRECTORS (AWARDS)"
+        },
+        {
+            "model": "Movie",
+            "property": "awards",
+            "order": "DESC",
+            "limit": 10,
+            "title": "TOP 10 MOVIES (AWARDS)"
         }
     ],
     "staticFiles": [
@@ -105,6 +116,26 @@
         {
             "originalPath": "./Server/StaticFiles/css.mustache",
             "destinationPath": "./Publish/Views/css.mustache"
+        },
+        {
+            "originalPath": "./Server/Populate/populate-db.js",
+            "destinationPath": "./Publish/Populate/populate-db.js"
+        },
+        {
+            "originalPath": "./Server/CssStyles/default.css",
+            "destinationPath": "./Publish/Public/Css/default.css"
+        },
+        {
+            "originalPath": "./Server/CssStyles/nav.css",
+            "destinationPath": "./Publish/Public/Css/nav.css"
+        },
+        {
+            "originalPath": "./Server/CssStyles/all.css",
+            "destinationPath": "./Publish/Public/Css/all.css"
+        },
+        {
+            "originalPath": "./Server/CssStyles/tops.css",
+            "destinationPath": "./Publish/Public/Css/tops.css"
         }
     ]
 }

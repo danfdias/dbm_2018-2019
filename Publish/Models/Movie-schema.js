@@ -13,7 +13,7 @@ module.exports = {
         },
         "imdb_pontuation": {
             "description": "IMDB pontuation of the movie",
-            "type": "number"
+            "type": "double"
         },
         "awards": {
             "description": "Awards that movie has",
@@ -25,15 +25,15 @@ module.exports = {
         },
         "budget": {
             "description": "The budget of the movie",
-            "type": "number"
+            "type": "double"
         },
         "duration": {
             "description": "The time of the movie",
-            "type": "string"
+            "type": "number"
         },
         "age_restriction": {
             "description": "The restriction of age that movie has",
-            "type": "string"
+            "type": "number"
         },
         "image": {
             "description": "The image that movie has",
@@ -46,7 +46,9 @@ module.exports = {
         "imdb_pontuation",
         "language",
         "duration",
-        "age_restriction"
+        "age_restriction",
+        "budget",
+        "awards"
     ],
     "references": [
         {

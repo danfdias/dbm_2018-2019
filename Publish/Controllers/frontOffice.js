@@ -4,31 +4,38 @@ var frontofficeRouter = express.Router();
 var arr = [
     {
         name: "Actor",
-        href: "./backoffice/Actor"
+        href: "./backoffice/Actor",
+        icon: "fas fa-users"
     },
     {
         name: "Director",
-        href: "./backoffice/Director"
+        href: "./backoffice/Director",
+        icon: "fas fa-users"
     },
     {
         name: "Category",
-        href: "./backoffice/Category"
+        href: "./backoffice/Category",
+        icon: "fas fa-filter"
     },
     {
         name: "Movie",
-        href: "./backoffice/Movie"
+        href: "./backoffice/Movie",
+        icon: "fas fa-film"
     },
     {
         name: "Place",
-        href: "./backoffice/Place"
+        href: "./backoffice/Place",
+        icon: "fas fa-couch"
     },
     {
         name: "Room",
-        href: "./backoffice/Room"
+        href: "./backoffice/Room",
+        icon: "fas fa-person-booth"
     },
     {
         name: "Ticket",
-        href: "./backoffice/Ticket"
+        href: "./backoffice/Ticket",
+        icon: "fas fa-ticket-alt"
     }
 ];
 
@@ -36,44 +43,62 @@ var arr = [
 /*************************************************** FrontOffice TopViews **********************************************************/
 /************************************************************************************************************************************/
 
-var movie = require('../Models/Movie.js');
-var movieSchema = require('../Models/Movie-schema.js');
-var movie = require('../Models/Movie.js');
-var movieSchema = require('../Models/Movie-schema.js');
-var movie = require('../Models/Movie.js');
-var movieSchema = require('../Models/Movie-schema.js');
 var actor = require('../Models/Actor.js');
 var actorSchema = require('../Models/Actor-schema.js');
+var movie = require('../Models/Movie.js');
+var movieSchema = require('../Models/Movie-schema.js');
+var director = require('../Models/Director.js');
+var directorSchema = require('../Models/Director-schema.js');
+var movie = require('../Models/Movie.js');
+var movieSchema = require('../Models/Movie-schema.js');
 
 /**
  * Rota da que vai fazer render do ficheiro frontoffice.mustache com a informação devolvida da função
- * ordered da classe 
+ * ordered da classe  
  *
  */
 frontofficeRouter.get('/',function(req,res) {
-    res.render('frontoffice', {
-            cssPath: "http://localhost:8082/style.css",
-            controllers:  arr,
-            /*rows: rows.map(obj => {
-                return {
-                    properties: Object.keys(obj).map(key => {
-                        return {
-                            name: key,
-                            value: obj[key]
-                        }
-                    })
-                }
-            }),
-            columns: Object.keys(new ()).map(key => {
-                return {
-                    name: key
-                };
-            })*/
+    var renderObject = {
+        cssPath: [
+                { css: "css/default.css"},
+                { css: "css/nav.css"},
+                { css: "css/all.css"},
+                { css: "css/tops.css"}
+            ],
+        controllers:  arr,
+        titles: []
+    };
+    actor.top("awards", "DESC", "10", function (rows) {
+        renderObject.query1_first5 = get5(rows);
+        renderObject.query1_last5 = get5(rows);
+        renderObject.titles.push("TOP 10 ACTORS (AWARDS)");
+        movie.top("imdb_pontuation", "DESC", "10", function (rows) {
+            renderObject.query2_first5 = get5(rows);
+            renderObject.query2_last5 = get5(rows);
+            renderObject.titles.push("TOP 10 MOVIES (IMDb)");
+            director.top("awards", "DESC", "10", function (rows) {
+                renderObject.query3_first5 = get5(rows);
+                renderObject.query3_last5 = get5(rows);
+                renderObject.titles.push("TOP 10 DIRECTORS (AWARDS)");
+                movie.top("awards", "DESC", "10", function (rows) {
+                renderObject.query4_first5 = get5(rows);
+                renderObject.query4_last5 = get5(rows);
+                renderObject.titles.push("TOP 10 MOVIES (AWARDS)");
+                res.render('frontoffice', renderObject);
+                });
+            });
         });
-    /*.top("", "", "", function (rows) {
-        console.log("estou aqui");
-        console.log(rows);
-        
-    });*/
+    });
 });
+
+function get5(array){
+    var array_return = [];
+    if(array.length > 0){        
+        if(array.length >= 5){
+            array_return = array.splice(0,5);        
+        }else array_return = array.splice(0,array.length);   
+    }     
+    return array_return; 
+}
+
 module.exports = frontofficeRouter;

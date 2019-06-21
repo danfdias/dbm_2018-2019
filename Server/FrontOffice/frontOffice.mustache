@@ -5,7 +5,8 @@ var arr = [
     {{#controllers}}
     {
         name: "{{controllerTitle}}",
-        href: "./backoffice/{{controllerTitle}}"
+        href: "./backoffice/{{controllerTitle}}",
+        icon: "{{controllerIcon}}"
     }{{#comma}},{{/comma}}
     {{/controllers}}    
 ];
@@ -21,33 +22,51 @@ var {{controllerTitleLower}}Schema = require('../Models/{{controllerTitle}}-sche
 
 /**
  * Rota da que vai fazer render do ficheiro frontoffice.mustache com a informação devolvida da função
- * ordered da classe {{controllerTitle}}
+ * ordered da classe {{controllerTitle}} {{controllersFrontOffice.[0]}}
  *
  */
 frontofficeRouter.get('/',function(req,res) {
-    res.render('frontoffice', {
-            cssPath: "http://localhost:8082/style.css",
-            controllers:  arr,
-            /*rows: rows.map(obj => {
-                return {
-                    properties: Object.keys(obj).map(key => {
-                        return {
-                            name: key,
-                            value: obj[key]
-                        }
-                    })
-                }
-            }),
-            columns: Object.keys(new {{controllerTitleLower}}()).map(key => {
-                return {
-                    name: key
-                };
-            })*/
+    var renderObject = {
+        cssPath: [
+                { css: "css/default.css"},
+                { css: "css/nav.css"},
+                { css: "css/all.css"},
+                { css: "css/tops.css"}
+            ],
+        controllers:  arr,
+        titles: []
+    };
+    {{controllersFrontOffice.0.controllerTitleLower}}.top("{{controllersFrontOffice.0.controllerProperty}}", "{{controllersFrontOffice.0.controllerOrder}}", "{{controllersFrontOffice.0.controllerLimit}}", function (rows) {
+        renderObject.query1_first5 = get5(rows);
+        renderObject.query1_last5 = get5(rows);
+        renderObject.titles.push("{{controllersFrontOffice.0.controllerComparison}}");
+        {{controllersFrontOffice.1.controllerTitleLower}}.top("{{controllersFrontOffice.1.controllerProperty}}", "{{controllersFrontOffice.1.controllerOrder}}", "{{controllersFrontOffice.1.controllerLimit}}", function (rows) {
+            renderObject.query2_first5 = get5(rows);
+            renderObject.query2_last5 = get5(rows);
+            renderObject.titles.push("{{controllersFrontOffice.1.controllerComparison}}");
+            {{controllersFrontOffice.2.controllerTitleLower}}.top("{{controllersFrontOffice.2.controllerProperty}}", "{{controllersFrontOffice.2.controllerOrder}}", "{{controllersFrontOffice.2.controllerLimit}}", function (rows) {
+                renderObject.query3_first5 = get5(rows);
+                renderObject.query3_last5 = get5(rows);
+                renderObject.titles.push("{{controllersFrontOffice.2.controllerComparison}}");
+                {{controllersFrontOffice.3.controllerTitleLower}}.top("{{controllersFrontOffice.3.controllerProperty}}", "{{controllersFrontOffice.3.controllerOrder}}", "{{controllersFrontOffice.3.controllerLimit}}", function (rows) {
+                renderObject.query4_first5 = get5(rows);
+                renderObject.query4_last5 = get5(rows);
+                renderObject.titles.push("{{controllersFrontOffice.3.controllerComparison}}");
+                res.render('frontoffice', renderObject);
+                });
+            });
         });
-    /*{{controllerTitleLower}}.top("{{controllerProperty}}", "{{controllerOrder}}", "{{controllerLimit}}", function (rows) {
-        console.log("estou aqui");
-        console.log(rows);
-        
-    });*/
+    });
 });
+
+function get5(array){
+    var array_return = [];
+    if(array.length > 0){        
+        if(array.length >= 5){
+            array_return = array.splice(0,5);        
+        }else array_return = array.splice(0,array.length);   
+    }     
+    return array_return; 
+}
+
 module.exports = frontofficeRouter;

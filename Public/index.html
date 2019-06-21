@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/all.css">
     <link rel="stylesheet" type="text/css" href="css/default.css">
     <link rel="stylesheet" type="text/css" href="css/nav.css">
     <title>Projeto DBM</title>
@@ -13,9 +13,16 @@
 <body>
     <nav class='navigation'>
         <ul id='main'>
-            <form>
-                <li><a><i class="fa fa-play"></i>Iniciar</a></li>
-            </form>
+            <li>
+                <a>
+                    <form action="/generate" method="POST" id="start">
+                        <button class="button" name="GNP" value="submit" type="submit">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </form>
+                    Iniciar                    
+                </a>
+            </li>
         </ul>
     </nav>
 </body>

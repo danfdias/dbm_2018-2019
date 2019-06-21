@@ -1,12 +1,10 @@
-@import url(https://fonts.googleapis.com/css?family=Slabo+27px);
-@import url(https://fonts.googleapis.com/css?family=Slabo+27px);
 html, body{
     text-align: center;
     margin: 0;
     padding: 0;
     width: 100%;   
     height: 100%; 
-    background-color: #f6f6f6 !important;
+    background-color: #cfcfcf !important;
     line-height: 1.25;
     font-family: 'Slabo 27px', serif;
 }
@@ -99,9 +97,15 @@ table {
       text-decoration: none;
   }
 
-  button{
-    border: none;
-    outline: none;
-    background: none;
+  #start{
+    width: 100%;
+    height: 60%;
   }
+
+  #divBox{
+    width: 100%;
+    height: 60%;
+  }
+
+  
   

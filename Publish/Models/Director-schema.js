@@ -7,7 +7,7 @@ module.exports = {
             "description": "Name of the director",
             "type": "string"
         },
-        "decription": {
+        "description": {
             "description": "A description of the director",
             "type": "string"
         },
@@ -26,7 +26,7 @@ module.exports = {
     },
     "required": [
         "name",
-        "decription",
+        "description",
         "awards",
         "gender"
     ]

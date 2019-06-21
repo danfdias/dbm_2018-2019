@@ -12,11 +12,12 @@ var template = fs.readFileSync(path.join(__dirname, 'frontOffice.mustache'));
 module.exports.generateFrontOffice = function(config) {
     var controllers = [];
     var controllersFrontOffice = [];
-    var str;
     config.schemas.forEach(function(element, index, array) {
+        console.log(element.icon);
         controller = {
             controllerTitle: element.name,
-            controllerTitleLower: element.name.toLowerCase()
+            controllerTitleLower: element.name.toLowerCase(),
+            controllerIcon: element.icon
         }
         if (index != array.length - 1){ 
             controller.comma = true;
@@ -25,17 +26,14 @@ module.exports.generateFrontOffice = function(config) {
     });
 
     config.frontOffice.forEach(function(element) {
-        var model = element["model"];
-        var property = element["property"];
-        var order = element["order"];
-        var limit = element["limit"];
         frontOficce = {
             controllerTitle: element.model,
             controllerTitleLower: element.model.toLowerCase(),
-            controllerModel: model,
-            controllerProperty: property,
-            controllerOrder: order,
-            controllerLimit: limit
+            controllerModel: element.model,
+            controllerProperty: element.property,
+            controllerOrder: element.order,
+            controllerLimit: element.limit,
+            controllerComparison: element.title
         }     
         controllersFrontOffice.push(frontOficce);  
     });

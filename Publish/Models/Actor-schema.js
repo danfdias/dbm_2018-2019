@@ -7,7 +7,7 @@ module.exports = {
             "description": "Name of the actor",
             "type": "string"
         },
-        "decription": {
+        "description": {
             "description": "A description of the actor",
             "type": "string"
         },
@@ -38,7 +38,8 @@ module.exports = {
     },
     "required": [
         "name",
-        "decription",
+        "description",
+        "awards",
         "gender",
         "height",
         "weight",

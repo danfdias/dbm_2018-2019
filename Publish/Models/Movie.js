@@ -13,8 +13,6 @@ class Movie {
         this.age_restriction = age_restriction;
         this.image = image;
         
-        Object.defineProperty(this, 'awards', { enumerable: false });
-        Object.defineProperty(this, 'budget', { enumerable: false });
         Object.defineProperty(this, 'image', { enumerable: false });
     }    
 }

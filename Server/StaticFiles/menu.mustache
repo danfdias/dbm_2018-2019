@@ -1,8 +1,22 @@
-<nav>
-    <ul>
-        <li><a href="/">Home</a></li>
+<nav class='navigation'>
+    <ul id='main'>
+        <li>
+            <a href="/">
+                <div id="divBox">
+                    <i class="fas fa-home"></i>
+                </div>
+                Home
+            </a>
+        </li>
         {{#controllers}}
-            <li><a href="{{href}}">{{name}}</a></li>
+            <li>
+                <a href="{{href}}">
+                    <div id="divBox">
+                        <i class="{{icon}}"></i>
+                    </div>
+                    {{name}}
+                </a>
+            </li>
         {{/controllers}}
     </ul>
 </nav>

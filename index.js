@@ -12,6 +12,7 @@ app.get("/", function (req, res) {
 
 app.post('/generate', function (req, res) {
     servidor.generateFolders();
+    res.redirect('http://localhost:8082/');
 });
 
 var server = app.listen(8081, function () {
