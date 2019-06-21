@@ -22,7 +22,12 @@ backofficeRouter.get('/Actor',function(req,res) {
     actor.all(function (rows) {
         res.render('list', {
             title: 'Actor',
-             cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../css/default.css"},
+                { css: "../css/nav.css"},
+                { css: "../css/all.css"},
+                { css: "../css/tops.css"}
+            ],
             rows: rows.map(obj => {
                 return {
                     properties: Object.keys(obj).map(key => {
@@ -256,7 +261,12 @@ backofficeRouter.get('/Director',function(req,res) {
     director.all(function (rows) {
         res.render('list', {
             title: 'Director',
-             cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../css/default.css"},
+                { css: "../css/nav.css"},
+                { css: "../css/all.css"},
+                { css: "../css/tops.css"}
+            ],
             rows: rows.map(obj => {
                 return {
                     properties: Object.keys(obj).map(key => {
@@ -490,7 +500,12 @@ backofficeRouter.get('/Category',function(req,res) {
     category.all(function (rows) {
         res.render('list', {
             title: 'Category',
-             cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../css/default.css"},
+                { css: "../css/nav.css"},
+                { css: "../css/all.css"},
+                { css: "../css/tops.css"}
+            ],
             rows: rows.map(obj => {
                 return {
                     properties: Object.keys(obj).map(key => {
@@ -724,7 +739,12 @@ backofficeRouter.get('/Movie',function(req,res) {
     movie.all(function (rows) {
         res.render('list', {
             title: 'Movie',
-             cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../css/default.css"},
+                { css: "../css/nav.css"},
+                { css: "../css/all.css"},
+                { css: "../css/tops.css"}
+            ],
             rows: rows.map(obj => {
                 return {
                     properties: Object.keys(obj).map(key => {
@@ -958,7 +978,12 @@ backofficeRouter.get('/Place',function(req,res) {
     place.all(function (rows) {
         res.render('list', {
             title: 'Place',
-             cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../css/default.css"},
+                { css: "../css/nav.css"},
+                { css: "../css/all.css"},
+                { css: "../css/tops.css"}
+            ],
             rows: rows.map(obj => {
                 return {
                     properties: Object.keys(obj).map(key => {
@@ -1192,7 +1217,12 @@ backofficeRouter.get('/Room',function(req,res) {
     room.all(function (rows) {
         res.render('list', {
             title: 'Room',
-             cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../css/default.css"},
+                { css: "../css/nav.css"},
+                { css: "../css/all.css"},
+                { css: "../css/tops.css"}
+            ],
             rows: rows.map(obj => {
                 return {
                     properties: Object.keys(obj).map(key => {
@@ -1426,7 +1456,12 @@ backofficeRouter.get('/Ticket',function(req,res) {
     ticket.all(function (rows) {
         res.render('list', {
             title: 'Ticket',
-             cssPath: "http://localhost:8082/style.css",
+            cssPath: [
+                { css: "../css/default.css"},
+                { css: "../css/nav.css"},
+                { css: "../css/all.css"},
+                { css: "../css/tops.css"}
+            ],
             rows: rows.map(obj => {
                 return {
                     properties: Object.keys(obj).map(key => {
