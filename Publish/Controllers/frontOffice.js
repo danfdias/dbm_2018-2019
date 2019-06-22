@@ -95,6 +95,7 @@ function get5(array, index, rankType){
     var array_return = [];
     var array_aux = [];
     var index_aux = index;
+    var stringPathStart = "./";
     if(array.length > 0){        
         if(array.length >= 5){
             array_aux = array.splice(0,5);        
@@ -105,13 +106,17 @@ function get5(array, index, rankType){
             array_return.push(
                 {
                     element: element,
-                    title: index_aux.toString().concat("º ", element.name, " (", element[rankType], ")")
+                    title: index_aux.toString().concat("º ", element.name, " (", element[rankType], ")"),
+                    href: stringPathStart.concat("backoffice/", element.constructor.name, "/Detalhe/", element.id)
                 }
             );
             index_aux++;
         });
     }
-    console.log(array_return);
+
+    array_return.forEach(function (element){
+        console.log(element);
+    });
     return array_return; 
 }
 
