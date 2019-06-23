@@ -1,6 +1,10 @@
 const mustache = require('mustache');
 const fs = require('fs');
 
+/**
+ * Metodo que cria as classes baseando-se nos schemas existentes e que de seguida cria os ficheiros das classes em formato js
+ * @param {*} config ficheiro config.json que terá as informaçoes schemas das classes a criar
+ */
 function createClasses(config) {
     config.schemas.forEach(schema => {
         const schemaName = schema['name'];
