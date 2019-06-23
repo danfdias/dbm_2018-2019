@@ -42,11 +42,4 @@ module.exports.generateFrontOffice = function(config) {
         controllersFrontOffice: controllersFrontOffice
     };
     return mustache.render(template.toString(), view);
-    /*
-    config.frontOffice.forEach( array) {
-        
-
-              
-    });
-    */
 }
