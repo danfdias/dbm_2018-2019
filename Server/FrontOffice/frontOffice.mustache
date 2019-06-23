@@ -22,8 +22,7 @@ var {{controllerTitleLower}}Schema = require('../Models/{{controllerTitle}}-sche
 
 /**
  * Rota da que vai fazer render do ficheiro frontoffice.mustache com a informação devolvida da função
- * ordered da classe {{controllerTitle}} {{controllersFrontOffice.[0]}}
- *
+ * ordered da classe {{controllerTitle}} {{controllersFrontOffice.[0]}} *
  */
 frontofficeRouter.get('/',function(req,res) {
     var renderObject = {
@@ -59,6 +58,12 @@ frontofficeRouter.get('/',function(req,res) {
     });
 });
 
+/**
+ * Funcao que retira 5 elementos de uma dada query para fazer realizar o top5 e top10
+ * @param {*} array Array com elementos do top10 recolhido
+ * @param {*} index Posicao que define a recolha do top5 ou top10
+ * @param {*} rankType Tipo de ranking realizado
+ */
 function get5(array, index, rankType){
     var array_return = [];
     var array_aux = [];

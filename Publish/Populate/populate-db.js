@@ -1,33 +1,81 @@
 var database = require('../Database/sqlite.js')('./Publish/Database/projeto_dbm.db');
 
+/**
+ * Metodo que insere um Ator na base de dados com base nas informaçoes recebidas
+ * @param {*} name Nome do ator
+ * @param {*} description Descricao sobre o ator
+ * @param {*} awards Nummero de premios que o ator têm
+ * @param {*} gender Genero do ator
+ * @param {*} height Altura do ator
+ * @param {*} weight Peso do ator
+ * @param {*} curiosities Curiosidades a cerca do ator
+ * @param {*} image Imagem perfil do ator
+ */
 function insertActor(name, description, awards, gender, height, weight, curiosities, image){
     database.run('INSERT INTO Actor (name, description, awards, gender, height, weight, curiosities, image) VALUES (?,?,?,?,?,?,?,?)', 
     [name, description, awards, gender, height, weight, curiosities, image]);    
 }
 
+/**
+ * Metodo que insere uma Categoria na base de dados com base nas informaçoes recebidas
+ * @param {*} type Tipo da categoria
+ */
 function insertCategory(type){
     database.run('INSERT INTO Category (type) VALUES (?)', [type]);    
 }
 
+/**
+ * Metodo que insere um Diretor na base de dados com base nas informaçoes recebidas
+ * @param {*} name Nome do diretor
+ * @param {*} description Descricao sobre o diretor
+ * @param {*} gender Genero do diretor
+ * @param {*} awards Numero de premios do diretor
+ * @param {*} image Imagem de pefil do diretor
+ */
 function insertDirector(name, description, gender, awards, image){
     database.run('INSERT INTO Director (name, description, gender, awards, image) VALUES (?,?,?,?,?)', 
     [name, description, gender, awards, image]);    
 }
 
+/**
+ * Metodo que insere um Filme na base de dados com base nas informaçoes recebidas
+ * @param {*} name Nome do filme
+ * @param {*} synopsis Sinopse sobre o filme
+ * @param {*} imdb_pontuation Pontuacao geral do filme
+ * @param {*} awards Numero de premios do filme 
+ * @param {*} language Linguagem do filme
+ * @param {*} budget Valor gasto na produção do filme
+ * @param {*} duration Duraçao do filme
+ * @param {*} age_restriction Idade minima para assistir ao filme
+ * @param {*} image Imagem perfil do filme
+ */
 function insertMovie(name, synopsis, imdb_pontuation, awards, language, budget, duration, age_restriction, image){
     database.run('INSERT INTO Movie (name, synopsis, imdb_pontuation, awards, language, budget, duration, age_restriction, image) VALUES (?,?,?,?,?,?,?,?,?)', 
     [name, synopsis, imdb_pontuation, awards, language, budget, duration, age_restriction, image]);    
 }
 
+/**
+ * Metodo que insere um Lugar de uma sala na base de dados com base nas informaçoes recebidas
+ * @param {*} chair_number Numero da cadeira
+ * @param {*} row Fila correspondente ao lugar
+ * @param {*} room Sala correspondente ao lugar
+ */
 function insertPlace(chair_number, row, room){
     database.run('INSERT INTO Place (chair_number, row, room_id) VALUES (?,?,?)', [chair_number, row, room]);    
 }
 
+/**
+ * Metodo que insere uma sala na base de dados com base nas informaçoes recebidas
+ * @param {*} number Numero da sala
+ */
 function insertRoom(number){    
     console.log("Inserindo room: " + number);
     database.run('INSERT INTO Room (number) VALUES (?)', [number]);    
 }
 
+/**
+ * Metodo que popula a base de dados com dados predefinidos
+ */
 module.exports.execPopulate = function (){
     var numeroSalas = 1;
     var numeroLugaresMax = 25;

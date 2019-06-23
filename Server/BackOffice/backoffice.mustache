@@ -202,6 +202,9 @@ backofficeRouter.get('/{{controllerTitle}}/Editar/:id',function(req,res) {
 
 {{/controllers}}
 
+/**
+    Funcao que dada uma string retorna a mesma com a primeira letra em CapitalCase
+*/
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
