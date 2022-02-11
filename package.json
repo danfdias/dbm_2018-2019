@@ -9,7 +9,7 @@
   "author": "Rafael Machado",
   "license": "ISC",
   "dependencies": {
-    "ajv": "^6.10.0",
+    "ajv": "^6.12.3",
     "body-parser": "^1.19.0",
     "child_process": "^1.0.2",
     "del": "^4.1.1",
